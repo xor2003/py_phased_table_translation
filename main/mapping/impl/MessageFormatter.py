@@ -1,7 +1,14 @@
+from typing import Any
+from abc import ABC, abstractmethod
+
+from ..MappingContext import MappingContext
+from ..Field import Field
+
+
 #*
 # * Formats messages related to mapping.
 # 
-class MessageFormatter(GroovyObjectSupport):
+class MessageFormatter(ABC):
     #    *
     #     * Creates a message explaining what's going on.
     #     *
@@ -10,44 +17,8 @@ class MessageFormatter(GroovyObjectSupport):
     #     * @param field          Field we were translating.
     #     * @param message        Explanation of what went wrong or what we were doing.
     #     * @return Detailed message.
-    #     
-#JAVA TO PYTHON CONVERTER TODO TASK: Java annotations have no direct Python equivalent:
-#ORIGINAL LINE: @Nonnull public abstract String formatMessage(@Nonnull MappingContext<?, ?, ?> mappingContext, @Nonnull Field<?, ?, ?, ?, ?> field, @Nonnull String message);
-    def formatMessage(self, mappingContext, field, message):
+    #
+    @abstractmethod
+    def formatMessage(self, mappingContext: MappingContext[Any, Any, Any], field: Field[Any, Any, Any, Any, Any], message: str) -> str:
         pass
-
-    class WarnIfDefinedOrDataErrorAnonymousInnerClass3(WarnIfDefinedOrDataError):
-        def __init__(self, defaulter, messageFormatter):
-            super().__init__(defaulter, messageFormatter)
-
-#JAVA TO PYTHON CONVERTER TODO TASK: There is no Python equivalent to Java's 'final' parameters:
-#ORIGINAL LINE: @Override protected String createMessage(Field field, MappingContext ctx, final MachineContext machine)
-        def createMessage(self, field, ctx, machine):
-            return (str((messageFormatter.invokeMethod("formatMessage", [ctx, field, "Input value is invalid: \'" + String.invokeMethod("valueOf", []) + "\'"]))))
-
-
-    class WarnIfDefinedOrDataErrorAnonymousInnerClass4(WarnIfDefinedOrDataError):
-        outerInstance = None
-
-        def __init__(self, outerInstance, defaulter, messageFormatter):
-            super().__init__(defaulter, messageFormatter)
-            self.outerInstance = outerInstance
-
-#JAVA TO PYTHON CONVERTER TODO TASK: There is no Python equivalent to Java's 'final' parameters:
-#ORIGINAL LINE: @Override protected String createMessage(Field field, MappingContext ctx, final MachineContext machine)
-        def createMessage(self, field, ctx, machine):
-            return (str((messageFormatter.invokeMethod("formatMessage", [ctx, field, "Input value cannot be validated: \'" + String.invokeMethod("valueOf", []) + "\'"]))))
-
-
-    class WarnIfDefinedOrDataErrorAnonymousInnerClass(WarnIfDefinedOrDataError):
-        outerInstance = None
-
-        def __init__(self, outerInstance, defaulter, messageFormatter):
-            super().__init__(defaulter, messageFormatter)
-            self.outerInstance = outerInstance
-
-#JAVA TO PYTHON CONVERTER TODO TASK: There is no Python equivalent to Java's 'final' parameters:
-#ORIGINAL LINE: @Override protected String createMessage(Field field, MappingContext ctx, final MachineContext machine)
-        def createMessage(self, field, ctx, machine):
-            return (str((messageFormatter.invokeMethod("formatMessage", [ctx, field, "Input value cannot be mapped: \'" + String.invokeMethod("valueOf", []) + "\'"]))))
 

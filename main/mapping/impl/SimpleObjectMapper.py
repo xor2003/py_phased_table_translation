@@ -8,56 +8,35 @@
 # * OO - Original object type.
 # * RO - Resulting object type.
 # * P - Type of parameters object.
-# 
-#JAVA TO PYTHON CONVERTER TODO TASK: Java annotations have no direct Python equivalent:
-#ORIGINAL LINE: @CompileStatic public class SimpleObjectMapper<OO, RO, P> extends GroovyObjectSupport implements ObjectMapper<OO, RO, P>
-class SimpleObjectMapper(GroovyObjectSupport, ObjectMapper):
-#JAVA TO PYTHON CONVERTER TODO TASK: Java annotations have no direct Python equivalent:
-#ORIGINAL LINE: @Override public void mapAllFields(@Nonnull OO raw, @Nonnull RO translated, @Nonnull Map<Field<OO, RO, ?, ?, P>, Boolean> fields, @Nullable P parameters)
-    def mapAllFields(self, raw, translated, fields, parameters):
+#
+
+from typing import Generic, TypeVar, Any
+
+from ..Field import Field
+from ..FieldMapper import FieldMapper
+from ..MappingContext import MappingContext
+from ..ObjectMapper import ObjectMapper
+from OptionalFieldMapper import OptionalFieldMapper
+from MandatoryFieldMapper import MandatoryFieldMapper
+
+OO = TypeVar('OO')
+RO = TypeVar('RO')
+P = TypeVar('P')
+
+
+class SimpleObjectMapper(Generic[OO, RO, P], ObjectMapper[OO, RO, P]):
+
+    def __init__(self):
+
+        self.optionalFieldMapper: FieldMapper[OO, RO, P] = OptionalFieldMapper[OO, RO, P]()
+
+        self.mandatoryFieldMapper: FieldMapper[OO, RO, P] = MandatoryFieldMapper[OO, RO, P]()
+
+    def mapAllFields(self, raw: OO, translated: RO, fields: dict[Field[OO, RO, Any, Any, P], bool], parameters: P):
         assert raw is not None
         assert translated is not None
         assert fields is not None
-        map = LinkedHashMap(3)
-        map.put("originalObject", raw)
-        map.put("resultObject", translated)
-        map.put("parameters", parameters)
-#JAVA TO PYTHON CONVERTER WARNING: The original Java variable was marked 'final':
-#ORIGINAL LINE: final MappingContext<OO, RO, P> mappingContext = new MappingContext<OO, RO, P>(map);
-        mappingContext = MappingContext(map)
-        fields.invokeMethod("each", [ClosureAnonymousInnerClass(self, mappingContext)])
+        mappingContext: MappingContext[OO, RO, P] = MappingContext[OO, RO, P](originalObject=raw, resultObject=translated, parameters=parameters)
+        for field, mandatory in fields.items():
+            (self.mandatoryFieldMapper if mandatory else self.optionalFieldMapper).mapField(field, mappingContext)
 
-    class ClosureAnonymousInnerClass(Closure):
-
-
-        def __init__(self, outerInstance, mappingContext):
-            super().__init__(outerInstance, outerInstance)
-            self._outerInstance = outerInstance
-            self._mappingContext = mappingContext
-
-        def doCall(self, field, mandatory):
-            return (getMandatoryFieldMapper() if mandatory else getOptionalFieldMapper()).invokeMethod("mapField", [field, self._mappingContext])
-
-
-    def getOptionalFieldMapper(self):
-        return optionalFieldMapper
-
-    def setOptionalFieldMapper(self, optionalFieldMapper):
-        self.optionalFieldMapper = optionalFieldMapper
-
-    def getMandatoryFieldMapper(self):
-        return mandatoryFieldMapper
-
-    def setMandatoryFieldMapper(self, mandatoryFieldMapper):
-        self.mandatoryFieldMapper = mandatoryFieldMapper
-
-    #    *
-    #     * Mapper for optional fields.
-    #     * <p>
-    #     * By default, this is {@link OptionalFieldMapper}.
-    #     
-    #    *
-    #     * Mapper for mandatory fields.
-    #     * <p>
-    #     * By default, this is {@link MandatoryFieldMapper}.
-    #     

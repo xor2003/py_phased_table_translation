@@ -1,3 +1,26 @@
+from typing import Callable, TypeVar
+
+from AbstractStateMachineFieldMapper import AbstractStateMachineFieldMapper
+from MessageFormatter import MessageFormatter
+from SingleLineMesasgeFormatter import SingleLineMesasgeFormatter
+from ...IllegalStateException import IllegalStateException
+from ..Field import Field
+from ..MappingContext import MappingContext
+from statemachine.CodeError import CodeError
+from statemachine.Defaulter import Defaulter
+from statemachine.End import End
+from statemachine.Getter import Getter
+from statemachine.MachineContext import MachineContext
+from statemachine.Setter import Setter
+from statemachine.State import State
+from statemachine.Translator import Translator
+from statemachine.Validator import Validator
+from statemachine.WarnIfDefinedOrDataError import WarnIfDefinedOrDataError
+
+OO = TypeVar('OO')
+RO = TypeVar('RO')
+P = TypeVar('P')
+
 #*
 # * State machine based mapper for mandatory fields.
 # * <p>
@@ -25,86 +48,64 @@
 # * RO - Resulting object type.
 # * P - Type of parameters object.
 # 
-#JAVA TO PYTHON CONVERTER TODO TASK: Java annotations have no direct Python equivalent:
-#ORIGINAL LINE: @CompileStatic public class MandatoryFieldMapper<OO, RO, P> extends AbstractStateMachineFieldMapper<OO, RO, P>
-class MandatoryFieldMapper(AbstractStateMachineFieldMapper):
-#JAVA TO PYTHON CONVERTER TODO TASK: Java annotations have no direct Python equivalent:
-#ORIGINAL LINE: @SuppressWarnings public MandatoryFieldMapper(Closure<MessageFormatter> messageFormatterFactory)
-    def __init__(self, messageFormatterFactory):
-        map = LinkedHashMap(1)
-        map.put("mandatory", True)
-        messageFormatter = messageFormatterFactory.call() if messageFormatterFactory.asBoolean() else SingleLineMesasgeFormatter(map)
+
+
+class MandatoryFieldMapper(AbstractStateMachineFieldMapper[OO, RO, P]):
+
+    class WarnIfDefinedOrDataError_InnerClass(WarnIfDefinedOrDataError):
+        def __init__(self, defaulter, messageFormatter, text):
+            super().__init__(defaulter, messageFormatter)
+            self.messageFormatter = messageFormatter
+            self.text = text
+
+        def createMessage(self, field: Field, ctx: MappingContext, machine: MachineContext):
+            return self.messageFormatter.formatMessage(ctx, field, self.text.format(**locals()))
+
+    #    *
+    #     * Creates new instance.
+    #     *
+    #     * @param messageFormatterFactory Factory for formatter of error messages or null
+    #     *                                if {@link SingleLineMesasgeFormatter} should be used.
+    #     
+    def __init__(self, messageFormatterFactory: Callable[...,MessageFormatter]=None):
+        self.stateMachine: State = None
+        messageFormatter: MessageFormatter = messageFormatterFactory() if messageFormatterFactory else SingleLineMesasgeFormatter(mandatory=True)
         getter = Getter()
         validator = Validator()
         translator = Translator()
         defaulter = Defaulter()
         setter = Setter()
         end = End()
-        getter.invokeMethod("configure", {validator, WarnIfDefinedOrDataErrorAnonymousInnerClass(self, defaulter, messageFormatter)
-        , WarnIfDefinedOrDataErrorAnonymousInnerClass2(self, defaulter, messageFormatter)
-        , defaulter
 
-    class WarnIfDefinedOrDataErrorAnonymousInnerClass(WarnIfDefinedOrDataError):
+        getter.configure(validator,
+                         MandatoryFieldMapper.WarnIfDefinedOrDataError_InnerClass(defaulter, messageFormatter, "Input value absent"),
+                         MandatoryFieldMapper.WarnIfDefinedOrDataError_InnerClass(defaulter, messageFormatter, "Cannot obtain input value"),
+                         defaulter)
+        validator.configure(translator,
+                            MandatoryFieldMapper.WarnIfDefinedOrDataError_InnerClass(defaulter, messageFormatter,
+                                                                                     "Input value is invalid: '{machine.resultValue}'"),
+                            MandatoryFieldMapper.WarnIfDefinedOrDataError_InnerClass(defaulter, messageFormatter,
+                                                                                     "Input value cannot be validated: '{machine.resultValue}'"),
+                            translator)
+        translator.configure(setter,
+                             CodeError("Translator returns null", messageFormatter),
+                             MandatoryFieldMapper.WarnIfDefinedOrDataError_InnerClass(defaulter, messageFormatter, "Input value cannot be mapped: '{machine.resultValue}'"),
+                             setter)
+
+        defaulter.configure(setter,
+                            CodeError("Defaulter returns null, this makes no sense", messageFormatter),
+                            CodeError("Defaulter throws exception", messageFormatter),
+                            CodeError('Should never see this as should get data error instead' +
+                        " by the means of {WarnIfDefinedOrDataError.simpleName}", messageFormatter))
+        setter.configure(end, end, CodeError("Setter throws exception", messageFormatter), end)
+        self.stateMachine = getter
 
 
-        def __init__(self, outerInstance, defaulter, messageFormatter):
-            super().__init__(defaulter, messageFormatter)
-            self._outerInstance = outerInstance
-            self._messageFormatter = messageFormatter
-
-        def createMessage(self, field, ctx, machine):
-            return (str((self._messageFormatter.invokeMethod("formatMessage", [ctx, field, "Input value absent"]))))
-
-
-    class WarnIfDefinedOrDataErrorAnonymousInnerClass2(WarnIfDefinedOrDataError):
-
-
-        def __init__(self, outerInstance, defaulter, messageFormatter):
-            super().__init__(defaulter, messageFormatter)
-            self._outerInstance = outerInstance
-            self._messageFormatter = messageFormatter
-
-        def createMessage(self, field, ctx, machine):
-            return (str((self._messageFormatter.invokeMethod("formatMessage", [ctx, field, "Cannot obtain input value"]))))
-
-#JAVA TO PYTHON CONVERTER TODO TASK: The following line could not be converted:
-    );
-    validator.invokeMethod("configure", {translator, WarnIfDefinedOrDataErrorAnonymousInnerClass3(defaulter, messageFormatter)
-    , WarnIfDefinedOrDataErrorAnonymousInnerClass4(self, defaulter, messageFormatter)
-    , translator
-)
-translator.invokeMethod("configure", {setter, CodeError("Translator returns null", messageFormatter), WarnIfDefinedOrDataErrorAnonymousInnerClass(self, defaulter, messageFormatter)
-, setter
-}
-)
-defaulter.invokeMethod("configure", [setter, CodeError("Defaulter returns null, this makes no sense", messageFormatter), CodeError("Defaulter throws exception", messageFormatter), CodeError("Should never see this as should get data error instead" + " by the means of " + String.invokeMethod("valueOf", []), messageFormatter)])
-setter.invokeMethod("configure", [end, end, CodeError("Setter throws exception", messageFormatter), end])
-self._stateMachine = ((getter))
-}
-
-#    *
-#     * Creates new instance.
-#     *
-#     * @param messageFormatterFactory Factory for formatter of error messages or null
-#     *                                if {@link SingleLineMesasgeFormatter} should be used.
-#     
-#JAVA TO PYTHON CONVERTER TODO TASK: Java annotations have no direct Python equivalent:
-#ORIGINAL LINE: @SuppressWarnings public MandatoryFieldMapper()
-public MandatoryFieldMapper()
-    self(None)
-
-#JAVA TO PYTHON CONVERTER TODO TASK: Java annotations have no direct Python equivalent:
-#ORIGINAL LINE: @Override protected State getStateMachine(@Nonnull Field<OO, RO, ?, ?, P> field)
-protected State self.getStateMachine( Field<OO, RO, P> field)
-    if (not field.getter) and not field.defaulter.asBoolean():
-        raise IllegalStateException("Neither getter not defaulter are set" + " - no way to obtain value to validate/translate/set.")
-
-    if field.getter and (not field.validator) and not field.setter.asBoolean():
-        raise IllegalStateException("There is a getter but neither validator, nor setter" + " so we neither validate, nor propagate it - this makes no sense for mandatory field.")
-
-    return self._stateMachine
-
-#JAVA TO PYTHON CONVERTER TODO TASK: Java annotations have no direct Python equivalent:
-#ORIGINAL LINE: @Nonnull private final State stateMachine;
-private final State self._stateMachine
-}
+    def getStateMachine(self, field: Field[OO, RO, P])-> State:
+        if not field.getter and not field.defaulter:
+            raise IllegalStateException("Neither getter not defaulter are set" + " - no way to obtain value to validate/translate/set.")
+    
+        if field.getter and not field.validator and not field.setter:
+            raise IllegalStateException("There is a getter but neither validator, nor setter" + " so we neither validate, nor propagate it - this makes no sense for mandatory field.")
+    
+        return self.stateMachine

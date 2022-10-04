@@ -1,4 +1,4 @@
-#*
+# *
 # * Message formatter that puts all information on single line.
 # * <p>
 # * Information that is added:
@@ -9,31 +9,21 @@
 # *     <li>field identifier</li>
 # *     <li>provided message</li>
 # * </ul>
-# 
-#JAVA TO PYTHON CONVERTER TODO TASK: Java annotations have no direct Python equivalent:
-#ORIGINAL LINE: @CompileStatic public class SingleLineMesasgeFormatter extends GroovyObjectSupport implements MessageFormatter
-class SingleLineMesasgeFormatter(GroovyObjectSupport, MessageFormatter):
+#
+from typing import Any
 
-    def __init__(self):
-        #instance fields found by Java to Python Converter:
-        self._mandatory = False
+from MessageFormatter import MessageFormatter
+from ..Field import Field
+from ..MappingContext import MappingContext
 
-#JAVA TO PYTHON CONVERTER TODO TASK: Java annotations have no direct Python equivalent:
-#ORIGINAL LINE: @Override @Nonnull public String formatMessage(@Nonnull final MappingContext<?, ?, ?> mappingContext, @Nonnull final Field<?, ?, ?, ?, ?> field, @Nonnull String message)
-#JAVA TO PYTHON CONVERTER TODO TASK: There is no Python equivalent to Java's 'final' parameters:
-    def formatMessage(self, mappingContext, field, message):
-        optionality = "mandatory" if self._mandatory else "optional"
-        return (str((String.invokeMethod("valueOf", [message]) + " for " + optionality + " field " + String.invokeMethod("valueOf", [field.id]) + "." + " On: ~~~>" + String.invokeMethod("valueOf", [mappingContext.originalObject]) + "<~~~" + " Parameters: " + String.invokeMethod("valueOf", [mappingContext.parameters]) + ".")))
 
-    def getMandatory(self):
-        return self._mandatory
+class SingleLineMesasgeFormatter(MessageFormatter):
 
-    def isMandatory(self):
-        return self._mandatory
+    def __init__(self, mandatory: bool = False):
+        self.mandatory: bool = mandatory
 
-    def setMandatory(self, mandatory):
-        self._mandatory = mandatory
 
-    #    *
-    #     * Indicates if the field is mandatory.
-    #     
+def formatMessage(self, mappingContext: MappingContext[Any, Any, Any], field: Field[Any, Any, Any, Any, Any],
+                  message: str) -> str:
+    optionality = "mandatory" if self.mandatory else "optional"
+    return f"{message} for {optionality} field {field.id}. " + f"On: ~~~>{mappingContext.originalObject}<~~~" + f" Parameters: {mappingContext.parameters}."

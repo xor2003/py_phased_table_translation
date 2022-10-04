@@ -41,7 +41,7 @@ class AbstractStateMachineFieldMapper(ABC, FieldMapper[OO, RO, P]):
         if field is None:
             raise IllegalStateException("Field descriptor must be set")
 
-        self.getStateMachine(field).invokeMethod("process", [field, mappingContext, MachineContext()])
+        self.getStateMachine(field).process(field, mappingContext, MachineContext())
 
     #    *
     #     * Gets state machine for this field mapper.

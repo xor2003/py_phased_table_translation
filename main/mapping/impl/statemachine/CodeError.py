@@ -20,7 +20,7 @@ class CodeError(AbstractState):
 
         assert errorDescription
         assert messageFormatter
-        self._errorDescription = errorDescription
+        self._errorDescription = errorDescription.format(**locals())
         self._messageFormatter = messageFormatter
 
     def process(self, field, mappingContext, machineContext):

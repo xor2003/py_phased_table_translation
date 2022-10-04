@@ -1,3 +1,5 @@
+from typing import Callable, TypeVar, Any
+
 #*
 # * State machine based mapper for optional fields.
 # * <p>
@@ -23,46 +25,71 @@
 # 
 #JAVA TO PYTHON CONVERTER TODO TASK: Java annotations have no direct Python equivalent:
 #ORIGINAL LINE: @CompileStatic public class OptionalFieldMapper<OO, RO, P> extends AbstractStateMachineFieldMapper<OO, RO, P>
-class OptionalFieldMapper(AbstractStateMachineFieldMapper):
+from AbstractStateMachineFieldMapper import AbstractStateMachineFieldMapper
+from .MessageFormatter import MessageFormatter
+from statemachine.Getter import Getter
+from statemachine.Validator import Validator
+from statemachine.Translator import Translator
+from statemachine.Defaulter import Defaulter
+from statemachine.Setter import Setter
+from statemachine.End import End
+from statemachine.Warn import Warn
+from .SingleLineMesasgeFormatter import SingleLineMesasgeFormatter
+from .statemachine.CodeError import CodeError
+from .statemachine.State import State
+from ..Field import Field
+from ...IllegalStateException import IllegalStateException
+
+OO = TypeVar('OO')
+RO = TypeVar('RO')
+P = TypeVar('P')
+
+class OptionalFieldMapper(AbstractStateMachineFieldMapper[OO, RO, P]):
+
+    def __init__(self):
+        self.normalStateMachine: State = None
+        self.ignoreInputFieldStateMachine: State = None
+        self.ignoreOutputFieldStateMachine: State = None
+    class WarnAnonymousInnerClass(Warn):
+
+        def __init__(self, defaulter, messageFormatter, text):
+            super().__init__(defaulter, messageFormatter)
+            self.messageFormatter = messageFormatter
+            self.text = text
+
+        def createMessage(self, field, mappingContext, machineContext):
+            return self.messageFormatter.formatMessage(mappingContext, field, self.text.format(**locals()))
+
     @staticmethod
-#JAVA TO PYTHON CONVERTER TODO TASK: Java annotations have no direct Python equivalent:
-#ORIGINAL LINE: @SuppressWarnings("MethodSize") private static State createNormalStateMachine(final MessageFormatter messageFormatter)
-#JAVA TO PYTHON CONVERTER TODO TASK: There is no Python equivalent to Java's 'final' parameters:
-    def _createNormalStateMachine(messageFormatter):
+    def createNormalStateMachine(messageFormatter: MessageFormatter) -> State:
         getter = Getter()
         validator = Validator()
         translator = Translator()
-#JAVA TO PYTHON CONVERTER WARNING: The original Java variable was marked 'final':
-#ORIGINAL LINE: final Defaulter defaulter = new Defaulter();
-        defaulter = Defaulter()
+        defaulter: Defaulter = Defaulter()
         setter = Setter()
         end = End()
-        getter.invokeMethod("configure", {validator, defaulter, WarnAnonymousInnerClass(defaulter, messageFormatter)
-        , defaulter
+        getter.configure(validator,
+                         defaulter,
+                         OptionalFieldMapper.WarnAnonymousInnerClass(defaulter, messageFormatter, 'Cannot obtain input value'),
+                         defaulter)
 
-    class WarnAnonymousInnerClass(Warn):
-
-        def __init__(self, defaulter, messageFormatter):
-            super().__init__(defaulter, messageFormatter)
-            self._messageFormatter = messageFormatter
-
-        def createMessage(self, field, mappingContext, machineContext):
-            return (str((self._messageFormatter.invokeMethod("formatMessage", [mappingContext, field, "Cannot obtain input value"]))))
-
-#JAVA TO PYTHON CONVERTER TODO TASK: The following line could not be converted:
-    );
-    validator.invokeMethod("configure", {translator, WarnAnonymousInnerClass2(defaulter, messageFormatter)
-    , WarnAnonymousInnerClass3(self, defaulter, messageFormatter)
-    , translator
-)
-translator.invokeMethod("configure", {setter, setter, WarnAnonymousInnerClass(self, defaulter, messageFormatter)
-, setter
-}
-)
-defaulter.invokeMethod("configure", [setter, CodeError("Defaulter returns null, this makes no sense", messageFormatter), CodeError("Defaulter throws exception", messageFormatter), end])
-setter.invokeMethod("configure", [end, end, CodeError("Setter throws exception", messageFormatter), end])
-return ((getter))
-}
+        validator.configure(translator,
+                            OptionalFieldMapper.WarnAnonymousInnerClass(defaulter, messageFormatter,"Input value is invalid: '{machineContext.resultValue}'"),
+                            OptionalFieldMapper.WarnAnonymousInnerClass(defaulter, messageFormatter,"Input value cannot be validated: '{machineContext.resultValue}'"),
+                            translator)
+        translator.configure(setter,
+                             setter,
+                             OptionalFieldMapper.WarnAnonymousInnerClass(defaulter,  messageFormatter,"Input value cannot be mapped: '{machineContext.resultValue}'"),
+                             setter)
+        defaulter.configure(setter,
+                            CodeError("Defaulter returns null, this makes no sense", messageFormatter),
+                            CodeError("Defaulter throws exception", messageFormatter),
+                            end)
+        setter.configure(end,
+                         end,
+                         CodeError("Setter throws exception", messageFormatter),
+                         end)
+        return getter
 
 #    *
 #     * Create state machine for the case when we just want to highlight that we ignore certain input field.
@@ -72,8 +99,9 @@ return ((getter))
 #     *
 #     * @return State machine to be executed.
 #     
-private static State com.hpe.amce.mapping.impl._createIgnoreInputFieldStateMachine()
-    return ((End()))
+    @staticmethod
+    def createIgnoreInputFieldStateMachine() -> State:
+        return End()
 
 #    *
 #     * Create state machine for the case when we just want to highlight that we ignore certain output field.
@@ -83,8 +111,9 @@ private static State com.hpe.amce.mapping.impl._createIgnoreInputFieldStateMachi
 #     *
 #     * @return State machine to be executed.
 #     
-private static State com.hpe.amce.mapping.impl._createIgnoreOutputFieldStateMachine()
-    return ((End()))
+    @staticmethod
+    def createIgnoreOutputFieldStateMachine() -> State:
+        return End()
 
 #    *
 #     * Creates new instance.
@@ -94,13 +123,11 @@ private static State com.hpe.amce.mapping.impl._createIgnoreOutputFieldStateMach
 #     
 #JAVA TO PYTHON CONVERTER TODO TASK: Java annotations have no direct Python equivalent:
 #ORIGINAL LINE: @SuppressWarnings public OptionalFieldMapper(Closure<MessageFormatter> messageFormatterFactory)
-public OptionalFieldMapper(Closure<MessageFormatter> messageFormatterFactory)
-    map = LinkedHashMap(1)
-    map.put("mandatory", False)
-    messageFormatter = messageFormatterFactory.call() if messageFormatterFactory.asBoolean() else SingleLineMesasgeFormatter(map)
-    self._normalStateMachine = createNormalStateMachine(messageFormatter)
-    self._ignoreInputFieldStateMachine = com.hpe.amce.mapping.impl._createIgnoreInputFieldStateMachine()
-    self._ignoreOutputFieldStateMachine = com.hpe.amce.mapping.impl._createIgnoreOutputFieldStateMachine()
+    def __init__(self, messageFormatterFactory: Callable[...,MessageFormatter]=None):
+        messageFormatter:MessageFormatter = messageFormatterFactory() if messageFormatterFactory else SingleLineMesasgeFormatter(mandatory=False)
+        self.normalStateMachine = OptionalFieldMapper.createNormalStateMachine(messageFormatter)
+        self.ignoreInputFieldStateMachine = OptionalFieldMapper.createIgnoreInputFieldStateMachine()
+        self.ignoreOutputFieldStateMachine = OptionalFieldMapper.createIgnoreOutputFieldStateMachine()
 
 #    *
 #     * Creates new instance.
@@ -108,35 +135,22 @@ public OptionalFieldMapper(Closure<MessageFormatter> messageFormatterFactory)
 #     * @param messageFormatterFactory Factory for formatter of error messages or null
 #     *                                if {@link SingleLineMesasgeFormatter} should be used.
 #     
-#JAVA TO PYTHON CONVERTER TODO TASK: Java annotations have no direct Python equivalent:
-#ORIGINAL LINE: @SuppressWarnings public OptionalFieldMapper()
-public OptionalFieldMapper()
-    self(None)
 
-#JAVA TO PYTHON CONVERTER TODO TASK: Java annotations have no direct Python equivalent:
-#ORIGINAL LINE: @Override protected State getStateMachine(@Nonnull Field<OO, RO, ?, ?, P> field)
-protected State self.getStateMachine( Field<OO, RO, P> field)
-    if (not field.getter) and not field.setter.asBoolean():
-        raise IllegalStateException("There are neither getter, nor setter. Can`t do anything with such field.")
 
-    if field.getter and (not field.validator) and not field.setter.asBoolean():
-        if field.defaulter or field.translator.asBoolean():
-            raise IllegalStateException("There is getter but no validator or setter" + " this means we want to show we ignore certain input field." + " This means defaulter or translator make no sense because their result will be ignored")
 
-        return self._ignoreInputFieldStateMachine
 
-    if (not field.getter) and (not field.defaulter) and field.setter.asBoolean():
-        return self._ignoreOutputFieldStateMachine
+    def getStateMachine(self, field: Field[OO, RO, Any, Any, P]) -> State:
+        assert field
+        if not field.getter and not field.setter:
+            raise IllegalStateException("There are neither getter, nor setter. Can`t do anything with such field.")
 
-    return self._normalStateMachine
+        if field.getter and (not field.validator) and not field.setter.asBoolean():
+            if field.defaulter or field.translator.asBoolean():
+                raise IllegalStateException("There is getter but no validator or setter" + " this means we want to show we ignore certain input field." + " This means defaulter or translator make no sense because their result will be ignored")
 
-#JAVA TO PYTHON CONVERTER TODO TASK: Java annotations have no direct Python equivalent:
-#ORIGINAL LINE: @Nonnull private final State normalStateMachine;
-private final State self._normalStateMachine
-#JAVA TO PYTHON CONVERTER TODO TASK: Java annotations have no direct Python equivalent:
-#ORIGINAL LINE: @Nonnull private final State ignoreInputFieldStateMachine;
-private final State self._ignoreInputFieldStateMachine
-#JAVA TO PYTHON CONVERTER TODO TASK: Java annotations have no direct Python equivalent:
-#ORIGINAL LINE: @Nonnull private final State ignoreOutputFieldStateMachine;
-private final State self._ignoreOutputFieldStateMachine
-}
+            return self._ignoreInputFieldStateMachine
+
+        if (not field.getter) and (not field.defaulter) and field.setter.asBoolean():
+            return self._ignoreOutputFieldStateMachine
+
+        return self._normalStateMachine
