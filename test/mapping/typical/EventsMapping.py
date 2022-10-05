@@ -1,204 +1,245 @@
-//====================================================================================================
-//The Free Edition of Java to Python Converter limits conversion output to 100 lines per file.
+from typing import Set, Any, Generic
 
-//To purchase the Premium Edition, visit our website:
-//https://www.tangiblesoftwaresolutions.com/order/order-java-to-python.html
-//====================================================================================================
+from main.mapping.Field import Field
+from main.mapping.ObjectMapper import ObjectMapper
+from test.mapping.typical.DistinguishedNameSerializer import DistinguishedNameSerializer
+from test.mapping.typical.Exchange import Exchange
+from test.mapping.typical.ExchangeFormatter import ExchangeFormatter
 
-#*
-# * Translates notifications.
-# 
-#JAVA TO PYTHON CONVERTER TODO TASK: Java annotations have no direct Python equivalent:
-#ORIGINAL LINE: @CompileStatic public class EventsMapping extends GroovyObjectSupport
-class EventsMapping(GroovyObjectSupport):
+from typing import TypeVar
+
+from test.mapping.typical.TimeSerializer import TimeSerializer
+
+OF = TypeVar('OF')
+RF = TypeVar('RF')
+
+"""
+ Context of batch translation.
+ """
+
+class BatchContext:
+    """
+     * Creates instance.
+     * @param exchangeFormatter Formatter used to dump exchange that is being processed.
+     * @param exchange Exchange that is being processed.
+     """
+    def __init__(self, exchangeFormatter: ExchangeFormatter,
+                 exchange: Exchange):
+        self.exchange = exchange
+        self.exchangeFormatter = exchangeFormatter
+
+    def toString(self) -> str:
+        return f"{{exchange={self.exchangeFormatter.format(self.exchange)}}}"
+
+
+"""
+ * Custom context that caches data from field to field while translating an event.
+ """
+# @ToString(includeNames = True, includePackage = False, ignoreNulls = False)
+class EventContext:
+    """
+     * Context of a batch.
+
+     * Name of the mapping table being used to map fields of event.
+
+     * Creates instance.
+     * @param batchContext Context of a batch.
+     * @param mappingTableName Name of the mapping table being used to map the event.
+     """
+
+    def __init__(self, batchContext: BatchContext, mappingTableName: str):
+        self.batchContext = batchContext
+        self.mappingTableName = mappingTableName
+
+"""
+ * A field with pre-set types of original and result objects for real time and resync channels.
+ * OF - Type of original field.
+ * RF - Type of result field.
+ """
+class F(Generic[OF, RF], Field[dict[str, object], dict[str, object], OF, RF, EventContext]):
+    pass
+
+# Translates notifications.
+
+class EventsMapping:
 
     def __init__(self):
-        #instance fields found by Java to Python Converter:
-        map = LinkedHashMap(20)
-        map.put((com.hpe.amce.mapping.typical.EventsMapping.F()).invokeMethod("withId", ["notificationType"]).invokeMethod("withDefaulter", {Closure(self, self)
-        public String self.doCall(Object it)
-        return "notifyNewAlarm"
-    
-        public String self.doCall()
-        return self.doCall(None)
-    
+        '''
+         * Value of agentEntity specified in configuration.
+         *
+         * Remove this when coding for real EMS and it provides agentEntity.
+         * Otherwise, keep the parameter but remove this comment.
+        '''
 
-    #    *
-    #     * Maps single real time event.
-    #     *
-    #     * @param raw          Incoming event.
-    #     * @param batchContext Mapping context.
-    #     * @return List of outgoing mapped events.
-    #     
-    def mapEvent(self, raw, batchContext):
-        notificationType = "notifyNewAlarm"
-        map = LinkedHashMap(1)
-        map.put("raw", Object.invokeMethod("cast", [raw]))
-        event = map
-        eventContext = com.hpe.amce.mapping.typical.EventsMapping.EventContext(batchContext, notificationType)
-        mapper.invokeMethod("mapAllFields", [raw, event, self.getNotifyNewAlarm(), eventContext])
-        result = Collections.invokeMethod("singletonList", [Map.invokeMethod("cast", [])])
+        self.configuredAgentEntity: str
+
+        """
+         * Mapping between probable causes sent by EMS and standard TMB probable causes.
+         """
+
+        self.probableCauses: dict[str, str]
+
+        """
+         * Mapping between alarm types sent by EMS and standard TMB alarm types.
+         """
+
+        self.alarmTypes: dict[str, str]
+
+        """
+         * Mapping between severities sent by EMS and standard TMB severities.
+         """
+
+        self.severities: dict[str, str]
+
+        """
+         * Fields used to translate objectInstance in real time notifications.
+         """
+
+        self.rtObjectInstanceFields: Set[str] = ['in_CLASS_1', 'in_CLASS_2', 'in_objectInstance']
+
+        """
+         * Serializes distinguished name that will be sent to the bus.
+         """
+
+        self.distinguishedNameSerializer: DistinguishedNameSerializer
+
+        """
+         * Converter for dates.
+         """
+
+        self.timeSerializer: TimeSerializer
+
+        """
+         * Mapper to be used to map events.
+         """
+
+        self.mapper: ObjectMapper[dict[str, object], dict[str, object], EventContext]
+        # Mapping table for raise alarm notifications.
+        self.notifyNewAlarm: dict[Field[dict[str, object], dict[str, object], Any, Any, EventContext], bool] = {
+                F[None, str](
+                        withId='notificationType'
+                        ,withDefaulter=(lambda d, it: 'notifyNewAlarm' )
+                        ,withSetter=(lambda d, it: setattr(d.resultObject, 'out_notificationType', it)) )       : True,
+                F[None, str](
+                        withId='agentEntity'
+                        ,withDefaulter=(lambda d, it: self.configuredAgentEntity )
+                        ,withSetter=(lambda d, it: setattr(d.resultObject, 'out_agentEntity', it)) )        : True,
+                F[str, str](
+                        withId='alarmId'
+                        ,withGetter=(lambda d, it: str(it['in_alarmId']) )
+                        ,withValidator=(lambda d, it: it )
+                        ,withTranslator=(lambda d, it: it )
+                        ,withSetter=(lambda d, it: setattr(d.resultObject, 'out_alarmId', it)) )                : True,
+                F[str, str](
+                        withId='alarmType'
+                        ,withGetter=(lambda d, it: str(it['in_alarmType']) )
+                        ,withValidator=(lambda d, it: it in self.alarmTypes )
+                        ,withTranslator=(lambda d, it: self.alarmTypes[it] )
+                        ,withSetter=(lambda d, it: setattr(d.resultObject, 'out_alarmType', it)) )            : True,
+                F[str, str](
+                        withId='objectClass'
+                        ,withGetter=(lambda d, it: str(it['in_objectClass']) )
+                        ,withSetter=(lambda d, it: setattr(d.resultObject, 'out_objectClass', it)) )           : False,
+                F[dict[str, object], str](
+                        withId='objectInstance'
+                        ,withValidator=(lambda d, it: (it['in_CLASS_2'] and it['in_CLASS_1']) or it['in_objectInstance'])
+                        ,withSetter=(lambda d, it: setattr(d.resultObject, 'out_objectInstance', it)) )         : True,
+                F[int, int](
+                        withId='notificationId'
+                        ,withGetter=(lambda d, it: int(it['in_notificationId']) )
+                        ,withSetter=(lambda d, it: setattr(d.resultObject, 'out_notificationId', it)) )        : False,
+                F[list[int], list[int]](
+                        withId='correlatedNotifications'
+                        ,withGetter=(lambda d, it: it.get('in_correlatedNotifications', None))
+                        ,withValidator=(lambda d, it: it )
+                        ,withSetter=(lambda d, it: setattr(d.resultObject, 'out_correlatedNotifications', it)) ) : False,
+                F[str, str](
+                        withId='eventTime'
+                        ,withGetter=(lambda d, it: str(it['in_eventTime']) )
+                        ,withValidator=(lambda d, it: it )
+                        ,withSetter=(lambda d, it: setattr(d.resultObject, 'out_eventTime', it)) )             : True,
+                F[str, str](
+                        withId='systemDN'
+                        ,withGetter=(lambda d, it: str(it['in_systemDN']) )
+                        ,withSetter=(lambda d, it: setattr(d.resultObject, 'out_systemDN', it)) )             : False,
+                F[str, str](
+                        withId='probableCause'
+                        ,withGetter=(lambda d, it: str(it['in_probableCause']) )
+                        ,withValidator=(lambda d, it: it in self.probableCauses )
+                        ,withDefaulter=(lambda d, it: 'indeterminate' )
+                        ,withTranslator=(lambda d, it: self.probableCauses[it] )
+                        ,withSetter=(lambda d, it: setattr(d.resultObject, 'out_probableCause', it)))            : True,
+                F[str, str](
+                        withId='perceivedSeverity'
+                        ,withGetter=(lambda d, it: str(it['in_perceivedSeverity']) )
+                        ,withValidator=(lambda d, it: it in self.severities )
+                        ,withDefaulter=(lambda d, it: 'Indeterminate' )
+                        ,withTranslator=(lambda d, it: self.severities[it] )
+                        ,withSetter=(lambda d, it: setattr(d.resultObject, 'out_perceivedSeverity', it)))        : True,
+                F[list[str], list[str]](
+                        withId='specificProblem'
+                        ,withSetter=(lambda d, it: setattr(d.resultObject, 'out_specificProblem', it)))         : False,
+                F[str, str](
+                        withId='additionalText'
+                        ,withGetter=(lambda d, it: str(it['in_additionalText']) )
+                        ,withSetter=(lambda d, it: setattr(d.resultObject, 'out_additionalText', it)))           : False,
+                F[str, str](
+                        withId='siteLocation'
+                        ,withGetter=(lambda d, it: str(it['in_siteLocation']) )
+                        ,withSetter=(lambda d, it: setattr(d.resultObject, 'out_siteLocation', it)))           : False,
+                F[str, str](
+                        withId='regionLocation'
+                        ,withGetter=(lambda d, it: str(it['in_regionLocation']) )
+                        ,withSetter=(lambda d, it: setattr(d.resultObject, 'out_regionLocation', it)))          : False,
+                F[str, str](
+                        withId='vendorName'
+                        ,withGetter=(lambda d, it: str(it['in_vendorName']) )
+                        ,withSetter=(lambda d, it: setattr(d.resultObject, 'out_vendorName', it)))           : False,
+                F[str, str](
+                        withId='technologyDomain'
+                        ,withGetter=(lambda d, it: str(it['in_technologyDomain']) )
+                        ,withSetter=(lambda d, it: setattr(d.resultObject, 'out_technologyDomain', it)))       : False,
+                F[str, str](
+                        withId='equipmentModel'
+                        ,withGetter=(lambda d, it: str(it['in_equipmentModel']) )
+                        ,withSetter=(lambda d, it: setattr(d.resultObject, 'out_equipmentModel', it)))          : False,
+                F[bool, bool](
+                        withId='plannedOutageIndication'
+                        ,withGetter=(lambda d, it: bool(it['in_plannedOutageIndication']) )
+                        ,withSetter=(lambda d, it: setattr(d.resultObject, 'out_plannedOutageIndication', it)))  : False
+        }
+
+        '''
+                        ,withGetter { it.findAll { it.key in rtObjectInstanceFields } }
+    
+                            ,withTranslator {
+                            (it['in_objectInstance'] as str) ?:
+                                    distinguishedNameSerializer.serialize([
+                                            CLASS_1: it['in_CLASS_1'],
+                                            CLASS_2: it['in_CLASS_2'],
+                                    ])
+                        }
+    
+                        ,withDefaulter { timeSerializer.serialize(Instant.now()) }
+                        ,withTranslator { timeSerializer.serialize(OffsetDateTime.parse(it).toInstant()) }
+    
+                        ,withGetter { list.cast(it['in_specificProblem'])?.collect { it as str } }
+                        '''
+
+    """
+     * Maps single real time event.
+     *
+     * @param raw Incoming event.
+     * @param batchContext Mapping context.
+     * @return list of outgoing mapped events.
+     """
+    def mapEvent(self, raw: dict[str, object], batchContext: BatchContext) -> list[dict[str, object]]:
+        notificationType: str = 'notifyNewAlarm'
+        event: dict[str, object] = [raw: object.cast(raw)]
+        eventContext: EventContext = EventContext(batchContext, notificationType)
+        self.mapper.mapAllFields(raw, event, self.notifyNewAlarm, eventContext)
+        result: list[dict[str, object]] = Collections.singletonList(dict.cast(event))
         return result
+    
 
-    def getNotifyNewAlarm(self):
-        return notifyNewAlarm
 
-    def setNotifyNewAlarm(self, notifyNewAlarm):
-        self.notifyNewAlarm = notifyNewAlarm
-
-    def getConfiguredAgentEntity(self):
-        return configuredAgentEntity
-
-    def setConfiguredAgentEntity(self, configuredAgentEntity):
-        self.configuredAgentEntity = configuredAgentEntity
-
-    def getProbableCauses(self):
-        return probableCauses
-
-    def setProbableCauses(self, probableCauses):
-        self.probableCauses = probableCauses
-
-    def getAlarmTypes(self):
-        return alarmTypes
-
-    def setAlarmTypes(self, alarmTypes):
-        self.alarmTypes = alarmTypes
-
-    def getSeverities(self):
-        return severities
-
-    def setSeverities(self, severities):
-        self.severities = severities
-
-    def getRtObjectInstanceFields(self):
-        return rtObjectInstanceFields
-
-    def getDistinguishedNameSerializer(self):
-        return distinguishedNameSerializer
-
-    def setDistinguishedNameSerializer(self, distinguishedNameSerializer):
-        self.distinguishedNameSerializer = distinguishedNameSerializer
-
-    def getTimeSerializer(self):
-        return timeSerializer
-
-    def setTimeSerializer(self, timeSerializer):
-        self.timeSerializer = timeSerializer
-
-    def getMapper(self):
-        return mapper
-
-    def setMapper(self, mapper):
-        self.mapper = mapper
-
-    #    *
-    #     * Mapping table for raise alarm notifications.
-    #     
-#JAVA TO PYTHON CONVERTER TODO TASK: The following line could not be converted:
-    ).invokeMethod("withSetter", new Object[]{new Closure(self, self)
-        def doCall(self, it):
-            return resultObject["out_notificationType"] = it
-
-        def doCall(self):
-            return self.doCall(None)
-
-#JAVA TO PYTHON CONVERTER TODO TASK: The following line could not be converted:
-), True);
-#JAVA TO PYTHON CONVERTER TODO TASK: The following assignment within expression was not converted by Java to Python Converter:
-#ORIGINAL LINE: map.put(new com.hpe.amce.mapping.typical.EventsMapping.F<Void, String>().invokeMethod("withId", new Object[]{"agentEntity"}).invokeMethod("withDefaulter", new Object[]{new Closure(this, this)
-map.put((com.hpe.amce.mapping.typical.EventsMapping.F()).invokeMethod("withId", ["agentEntity"]).invokeMethod("withDefaulter", [ClosureAnonymousInnerClass()]).invokeMethod("withSetter", {Closure(self, self){public Object self.doCall(Object it){return resultObject["out_agentEntity"] = it
-}
-
-public Object self.doCall()
-    return self.doCall(None)
-
-}
-}
-), True)
-map.put((com.hpe.amce.mapping.typical.EventsMapping.F()).invokeMethod("withId", ["alarmId"]).invokeMethod("withGetter", [ClosureAnonymousInnerClass2(self)]).invokeMethod("withValidator", [Closure.IDENTITY]).invokeMethod("withTranslator", {Closure(self, self){public Object self.doCall(Object it){return it
-}
-
-public Object self.doCall()
-    return self.doCall(None)
-
-}
-}
-#JAVA TO PYTHON CONVERTER TODO TASK: The following line could not be converted:
-).invokeMethod("withSetter", new Object[]{new Closure(self, self)
-    public Object self.doCall(Object it)
-        return resultObject["out_alarmId"] = it
-
-    public Object self.doCall()
-        return self.doCall(None)
-
-}
-), True)
-map.put((com.hpe.amce.mapping.typical.EventsMapping.F()).invokeMethod("withId", ["alarmType"]).invokeMethod("withGetter", [ClosureAnonymousInnerClass4(self)]).invokeMethod("withValidator", {Closure(self, self){public Object self.doCall(Object it){return getAlarmTypes().invokeMethod("containsKey", [it])
-}
-
-public Object self.doCall()
-    return self.doCall(None)
-
-}
-}
-#JAVA TO PYTHON CONVERTER TODO TASK: The following line could not be converted:
-).invokeMethod("withTranslator", new Object[]{new Closure(self, self)
-    public Object self.doCall(Object it)
-        return getAlarmTypes().getAt(it)
-
-    public Object self.doCall()
-        return self.doCall(None)
-
-}
-#JAVA TO PYTHON CONVERTER TODO TASK: The following line could not be converted:
-).invokeMethod("withSetter", new Object[]{new Closure(self, self)
-    public Object self.doCall(Object it)
-        return resultObject["out_alarmType"] = it
-
-    public Object self.doCall()
-        return self.doCall(None)
-
-}
-), True)
-#JAVA TO PYTHON CONVERTER TODO TASK: The following assignment within expression was not converted by Java to Python Converter:
-#ORIGINAL LINE: map.put(new com.hpe.amce.mapping.typical.EventsMapping.F<String, String>().invokeMethod("withId", new Object[]{"objectClass"}).invokeMethod("withGetter", new Object[]{new Closure(this, this)
-map.put((com.hpe.amce.mapping.typical.EventsMapping.F()).invokeMethod("withId", ["objectClass"]).invokeMethod("withGetter", [ClosureAnonymousInnerClass7(self)]).invokeMethod("withSetter", {Closure(self, self){public Object self.doCall(Object it){return resultObject["out_objectClass"] = it
-}
-
-public Object self.doCall()
-    return self.doCall(None)
-
-}
-}
-), False)
-map.put((com.hpe.amce.mapping.typical.EventsMapping.F()).invokeMethod("withId", ["objectInstance"]).invokeMethod("withGetter", {ClosureAnonymousInnerClass8(self)public Object self.doCall(){return self.doCall(None)
-
-}
-
-}
-}
-#JAVA TO PYTHON CONVERTER TODO TASK: The following line could not be converted:
-).invokeMethod("withValidator", new Object[]{new Closure(self, self)
-    public Boolean self.doCall(Object it)
-        return (it.getAt("in)CLASS_2") and it.getAt("in_CLASS_1")) or it.getAt("in_objectInstance")
-
-    public Boolean self.doCall()
-        return self.doCall(None)
-
-}
-#JAVA TO PYTHON CONVERTER TODO TASK: The following line could not be converted:
-).invokeMethod("withTranslator", new Object[]{new Closure(self, self)
-    public String self.doCall(Object it)
-#JAVA TO PYTHON CONVERTER WARNING: The original Java variable was marked 'final':
-#ORIGINAL LINE: final String s = (String) it.getAt("in_objectInstance");
-        s = str(it.getAt("in_objectInstance"))
-        map1 = LinkedHashMap(2)
-        map1.put("CLASS_1", it.getAt("in_CLASS_1"))
-        map1.put("CLASS_2", it.getAt("in_CLASS_2"))
-
-//====================================================================================================
-//End of the allowed output for the Free Edition of Java to Python Converter.
-
-//To purchase the Premium Edition, visit our website:
-//https://www.tangiblesoftwaresolutions.com/order/order-java-to-python.html
-//====================================================================================================

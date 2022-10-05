@@ -1,10 +1,8 @@
-#JAVA TO PYTHON CONVERTER TODO TASK: Java annotations have no direct Python equivalent:
-#ORIGINAL LINE: @CompileStatic public interface DistinguishedNameSerializer extends GroovyObjectSupport
-class DistinguishedNameSerializer(GroovyObjectSupport):
-    def serialize(self, pairs):
-        pass
+from abc import ABC
+from typing import Any
 
-    @staticmethod
-    def setGroovyRef(ref, newValue):
-        ref.set(newValue)
-        return newValue
+
+class DistinguishedNameSerializer(ABC):
+
+    def serialize(self, pairs: dict[str, Any]) -> str:
+        pass

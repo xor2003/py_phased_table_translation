@@ -1,10 +1,8 @@
-#JAVA TO PYTHON CONVERTER TODO TASK: Java annotations have no direct Python equivalent:
-#ORIGINAL LINE: @CompileStatic public interface ExchangeFormatter extends GroovyObjectSupport
-class ExchangeFormatter(GroovyObjectSupport):
-    def format(self, exchange):
-        pass
+from abc import ABC
 
-    @staticmethod
-    def setGroovyRef(ref, newValue):
-        ref.set(newValue)
-        return newValue
+from Exchange import Exchange
+
+
+class ExchangeFormatter(ABC):
+    def format(self, exchange: Exchange) -> str:
+        pass

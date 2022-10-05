@@ -1,10 +1,7 @@
-#JAVA TO PYTHON CONVERTER TODO TASK: Java annotations have no direct Python equivalent:
-#ORIGINAL LINE: @CompileStatic public interface Exchange extends GroovyObjectSupport
-class Exchange(GroovyObjectSupport):
-    def setExchangeProperty(self, name, value):
+from abc import ABC
+
+
+class Exchange(ABC):
+    def setExchangeProperty(self, name: str, value: str):
         pass
 
-    @staticmethod
-    def setGroovyRef(ref, newValue):
-        ref.set(newValue)
-        return newValue
