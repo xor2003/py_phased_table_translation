@@ -16,7 +16,7 @@
 # * RF - Resulting field type.
 # * P - Type of parameters object.
 # 
-from typing import Generic, TypeVar, Callable, Any, Self
+from typing import Generic, TypeVar, Callable
 
 OO = TypeVar('OO')
 RO = TypeVar('RO')
@@ -53,6 +53,7 @@ class Field(Generic[OO, RO, OF, RF, P]):
         self.setter = withSetter
         self.defaulter = withDefaulter
 
+    '''
         """
         `withId`: Sets identifier of field
         
@@ -117,6 +118,7 @@ class Field(Generic[OO, RO, OF, RF, P]):
     def withDefaulter(self, c: Callable[[], RF]) -> Self:
         self.defaulter = c
         return self
+    '''
 
     def toString(self) -> str:
         return self.id

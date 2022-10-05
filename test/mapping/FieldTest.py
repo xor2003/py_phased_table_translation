@@ -20,15 +20,16 @@ class Params:
         self.parameter: str = ""
 
 
-@when
+#@when
 def construct_via_fluent_API_with_closure_parameters_and_delegate_help_from_IDE():
+    global field
     field = Field[Original, Result, str, int, Params](
         withId=(lambda d, it: 'notificationIdentifier'),
         withGetter=(lambda d, it: it.identifier),
         withValidator=(lambda d, it: it != d.parameters.parameter),
         withDefaulter=(lambda d, it: 777),
         withTranslator=(lambda d, it: int(it)),
-        withSetter=(lambda d, it: (d.resultObject.notificationIdentifier := it,)))
+        withSetter=(lambda d, it: setattr(d.resultObject, 'notificationIdentifier', it)))
     '''
     field = Field[Original, Result, str, int, Params]
     field.withId(lambda it: 'notificationIdentifier')
@@ -39,12 +40,15 @@ def construct_via_fluent_API_with_closure_parameters_and_delegate_help_from_IDE(
     field.withSetter(lambda it: resultObject.notificationIdentifier = it)
     '''
 
-    @ then
+#@then
+def test():
+    global field
+    assert field.id == "notificationIdentifier"
+    assert field.getter
+    assert field.validator
+    assert field.defaulter
+    assert field.translator
+    assert field.setter
 
-    def test():
-        assert field.id == "notificationIdentifier"
-        assert field.getter
-        assert field.validator
-        assert field.defaulter
-        assert field.translator
-        assert field.setter
+construct_via_fluent_API_with_closure_parameters_and_delegate_help_from_IDE()
+test()
