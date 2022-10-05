@@ -118,6 +118,6 @@ class AbstractState(ABC, State):
     def callWithDelegate(self, closure, delegate, *args):
        #clonedClosure = closure.invokeMethod("clone", [])  TODO
        #clonedClosure.resolveStrategy = Closure.DELEGATE_FIRST
-       #clonedClosure.delegate = delegate
-       return closure #.call(*args)
+       #closure.delegate = delegate
+       return closure(delegate, *args)
 

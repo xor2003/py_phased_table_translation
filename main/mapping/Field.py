@@ -26,26 +26,32 @@ P = TypeVar('P')
 
 class Field(Generic[OO, RO, OF, RF, P]):
 
-    def __init__(self):
-        #     * Identifier of field.
-        #     * Used for debugging and testing purposes.
-        #
-        #     * Gets field value from original object.
-        #
-        #     * Verifies field value from original object.
-        #
-        #     * Translates field value from original object to format of result object.
-        #
-        #     * Injects translated field value into result object.
-        #
-        #     * Gets field value in case it was not set in original object.
-        #
-        self.id: str = None
-        self.getter: Callable[..., OF] = None
-        self.validator: Callable[..., bool] = None
-        self.translator: Callable[..., RF] = None
-        self.setter: Callable[..., Any] = None
-        self.defaulter: Callable[..., RF] = None
+    #     * Identifier of field.
+    #     * Used for debugging and testing purposes.
+    #
+    #     * Gets field value from original object.
+    #
+    #     * Verifies field value from original object.
+    #
+    #     * Translates field value from original object to format of result object.
+    #
+    #     * Injects translated field value into result object.
+    #
+    #     * Gets field value in case it was not set in original object.
+    #
+    def __init__(self, withId: str=None,
+                 withGetter: Callable[[OO], OF]=None,
+                 withValidator: Callable[[OF], bool]=None,
+                 withTranslator: Callable[[OF], RF]=None,
+                 withSetter: Callable[[RF], None]=None,
+                 withDefaulter: Callable[[], RF]=None
+                 ):
+        self.id: str = withId
+        self.getter = withGetter
+        self.validator = withValidator
+        self.translator = withTranslator
+        self.setter = withSetter
+        self.defaulter = withDefaulter
 
         """
         `withId`: Sets identifier of field
@@ -63,7 +69,7 @@ class Field(Generic[OO, RO, OF, RF, P]):
         
         :param c: Closure that takes one parameter - original object. Should return original field value
         """
-    def withGetter(self, c: Callable[..., OF]) -> Self:
+    def withGetter(self, c: Callable[[OO], OF]) -> Self:
         self.getter = c
         return self
 
@@ -74,7 +80,7 @@ class Field(Generic[OO, RO, OF, RF, P]):
     #     *          Should return true if original value has acceptable value.
     #     * @return this for chaining
     #     
-    def withValidator(self, c: Callable[..., bool]) -> Self:
+    def withValidator(self, c: Callable[[OF], bool]) -> Self:
         self.validator = c
         return self
 
@@ -86,7 +92,7 @@ class Field(Generic[OO, RO, OF, RF, P]):
     #     *          Should return resulting mapped value.
     #     * @return this for chaining
     #     
-    def withTranslator(self, c: Callable[..., RF]) -> Self:
+    def withTranslator(self, c: Callable[[OF], RF]) -> Self:
         self.translator = c
         return self
 
@@ -98,7 +104,7 @@ class Field(Generic[OO, RO, OF, RF, P]):
     #     *          Doesn't have to return anything.
     #     * @return this for chaining
     #     
-    def withSetter(self, c: Callable[..., Any]) -> Self:
+    def withSetter(self, c: Callable[[RF], None]) -> Self:
         self.setter = c
         return self
 
@@ -108,7 +114,7 @@ class Field(Generic[OO, RO, OF, RF, P]):
     #     * @param c Closure that takes no parameters and returns resulting value for the field.
     #     * @return this for chaining.
     #     
-    def withDefaulter(self, c: Callable[..., RF]) -> Self:
+    def withDefaulter(self, c: Callable[[], RF]) -> Self:
         self.defaulter = c
         return self
 
