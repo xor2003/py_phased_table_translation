@@ -5,8 +5,13 @@
 # * If next step is not defined then instead it throws data error with the same message
 # * as would be logged.
 # 
-#JAVA TO PYTHON CONVERTER TODO TASK: Java annotations have no direct Python equivalent:
-#ORIGINAL LINE: @CompileStatic @SuppressWarnings("AbstractClassWithoutAbstractMethod") public abstract class WarnIfDefinedOrDataError extends Warn
+
+from Warn import Warn
+
+class IllegalArgumentException:
+    pass
+
+
 class WarnIfDefinedOrDataError(Warn):
     #    *
     #     * Creates instance.
@@ -18,8 +23,8 @@ class WarnIfDefinedOrDataError(Warn):
         super().__init__(delegate, messageFactory)
 
     def process(self, field, mappingContext, machineContext):
-        if not invokeMethod("isDefined", [field]).asBoolean():
-            raise IllegalArgumentException(invokeMethod("createMessage", [field, mappingContext, machineContext]), machineContext.error)
+        if not self.isDefined(field):
+            raise IllegalArgumentException(self.createMessage(field, mappingContext, machineContext), machineContext.error)
 
-        return ((super().invokeMethod("process", [field, mappingContext, machineContext])))
+        return super().process(field, mappingContext, machineContext)
 

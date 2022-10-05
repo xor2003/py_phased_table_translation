@@ -1,19 +1,28 @@
 #*
 # * Pushes a warning to log and then delegates to another step.
 # 
-#JAVA TO PYTHON CONVERTER TODO TASK: Java annotations have no direct Python equivalent:
-#ORIGINAL LINE: @Log4j2 @CompileStatic public abstract class Warn extends AbstractState
+from AbstractState import AbstractState
+from .State import State
+from ..MessageFormatter import MessageFormatter
+from ...Field import Field
+from ...MappingContext import MappingContext
+from MachineContext import MachineContext
+
+import logging
+
+logger=logging.getLogger(__name__)
+
 class Warn(AbstractState):
-    def process(self, field, mappingContext, machineContext):
-        if machineContext.error.asBoolean():
-            log.invokeMethod("warn", [self.createMessage(field, mappingContext, machineContext), machineContext.error])
+    def process(self, field: Field, mappingContext: MappingContext, machineContext: MachineContext):
+        if machineContext.error:
+            logger.warning(self.createMessage(field, mappingContext, machineContext) + machineContext.error)
         else:
-            log.invokeMethod("warn", [self.createMessage(field, mappingContext, machineContext)])
+            logger.warning(self.createMessage(field, mappingContext, machineContext))
 
-        return ((self._delegate.invokeMethod("process", [field, mappingContext, machineContext])))
+        return self._delegate.process(field, mappingContext, machineContext)
 
-    def isDefined(self, field):
-        return (bool((self._delegate.invokeMethod("isDefined", [field]))))
+    def isDefined(self, field: Field):
+        return bool(self._delegate.isDefined(field))
 
     #    *
     #     * Creates instance.
@@ -21,13 +30,7 @@ class Warn(AbstractState):
     #     * @param delegate Step to delegate to after logging.
     #     * @param mapper   Mapper used to log message.
     #     
-#JAVA TO PYTHON CONVERTER TODO TASK: Java annotations have no direct Python equivalent:
-#ORIGINAL LINE: protected Warn(@Nonnull State delegate, @Nonnull MessageFormatter messageFormatter)
-    def __init__(self, delegate, messageFormatter):
-        #instance fields found by Java to Python Converter:
-        self._delegate = None
-        self._messageFormatter = None
-
+    def __init__(self, delegate: State, messageFormatter: MessageFormatter):
         assert delegate
         assert messageFormatter
         self._delegate = delegate
@@ -41,6 +44,6 @@ class Warn(AbstractState):
     #     * @param machineContext State machine context.
     #     * @return Message to be logged.
     #     
-    def createMessage(self, field, mappingContext, machineContext):
+    def createMessage(self, field: Field, mappingContext: MappingContext, machineContext: MachineContext):
         pass
 

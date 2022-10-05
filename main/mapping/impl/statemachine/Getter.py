@@ -1,16 +1,12 @@
 #*
 # * Extracts input value.
 # 
-#JAVA TO PYTHON CONVERTER TODO TASK: Java annotations have no direct Python equivalent:
-#ORIGINAL LINE: @CompileStatic public class Getter extends AbstractState
+from AbstractState import AbstractState
+from ...Field import Field
+from ...MappingContext import MappingContext
+from MachineContext import MachineContext
 class Getter(AbstractState):
-#JAVA TO PYTHON CONVERTER TODO TASK: There is no Python equivalent to Java's 'final' parameters:
-#ORIGINAL LINE: @Override public Object process(final Field field, final MappingContext mappingContext, MachineContext machineContext)
-    def process(self, field, mappingContext, machineContext):
-        return ((invokeMethod("safely", [field, mappingContext, machineContext, True, ClosureAnonymousInnerClass(self, field, mappingContext)])))
-
-    class ClosureAnonymousInnerClass(Closure):
-
+    class ClosureAnonymousInnerClass:
 
         def __init__(self, outerInstance, field, mappingContext):
             super().__init__(outerInstance, outerInstance)
@@ -19,12 +15,13 @@ class Getter(AbstractState):
             self._mappingContext = mappingContext
 
         def doCall(self, it):
-            return invokeMethod("callWithDelegate", [self._field.getter, self._mappingContext, self._mappingContext.originalObject])
+            return self._outerInstance.callWithDelegate(self._field.getter, self._mappingContext)
 
         def doCall(self):
             return self.doCall(None)
+    def process(self, field: Field, mappingContext: MappingContext, machineContext: MachineContext):
+        return self.safely(field, mappingContext, machineContext, True, Getter.ClosureAnonymousInnerClass(self, field, mappingContext))
 
-
-    def isDefined(self, field):
+    def isDefined(self, field: Field):
         return field.getter is not None
 

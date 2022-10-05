@@ -2,12 +2,16 @@
 # * Ends processing.
 # * Does not need to be configured.
 # 
-#JAVA TO PYTHON CONVERTER TODO TASK: Java annotations have no direct Python equivalent:
-#ORIGINAL LINE: @CompileStatic public class End extends AbstractState
-class End(AbstractState):
-    def process(self, field, mappingContext, machineContext):
-        return ((machineContext.resultValue))
 
-    def isDefined(self, field):
+from AbstractState import AbstractState
+from ...Field import Field
+from ...MappingContext import MappingContext
+from MachineContext import MachineContext
+
+class End(AbstractState):
+    def process(self, field: Field, mappingContext: MappingContext, machineContext: MachineContext):
+        return machineContext.resultValue
+
+    def isDefined(self, field: Field):
         return True
 

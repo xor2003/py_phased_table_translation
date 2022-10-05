@@ -4,6 +4,14 @@
 # 
 #JAVA TO PYTHON CONVERTER TODO TASK: Java annotations have no direct Python equivalent:
 #ORIGINAL LINE: @CompileStatic public class CodeError extends AbstractState
+from AbstractState import AbstractState
+from main.IllegalStateException import IllegalStateException
+from .MachineContext import MachineContext
+from ..MessageFormatter import MessageFormatter
+from ...Field import Field
+from ...MappingContext import MappingContext
+
+
 class CodeError(AbstractState):
     #    *
     #     * Creates new instance.
@@ -11,21 +19,16 @@ class CodeError(AbstractState):
     #     * @param errorDescription Explanation of error.
     #     * @param messageFormatter Formatter of error message.
     #     
-#JAVA TO PYTHON CONVERTER TODO TASK: Java annotations have no direct Python equivalent:
-#ORIGINAL LINE: public CodeError(@Nonnull String errorDescription, @Nonnull MessageFormatter messageFormatter)
-    def __init__(self, errorDescription, messageFormatter):
-        #instance fields found by Java to Python Converter:
-        self._errorDescription = None
-        self._messageFormatter = None
 
+    def __init__(self, errorDescription: str, messageFormatter: MessageFormatter):
         assert errorDescription
         assert messageFormatter
-        self._errorDescription = errorDescription.format(**locals())
-        self._messageFormatter = messageFormatter
+        self.errorDescription = errorDescription.format(**locals())
+        self.messageFormatter = messageFormatter
 
-    def process(self, field, mappingContext, machineContext):
-        raise IllegalStateException(self._messageFormatter.invokeMethod("formatMessage", [mappingContext, field, self._errorDescription]), machineContext.error)
+    def process(self, field: Field, mappingContext: MappingContext, machineContext: MachineContext):
+        raise IllegalStateException(self.messageFormatter.formatMessage(mappingContext, field, self.errorDescription), machineContext.error)
 
-    def isDefined(self, field):
+    def isDefined(self, field: Field):
         return True
 
