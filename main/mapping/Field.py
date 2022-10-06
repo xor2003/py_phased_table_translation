@@ -52,6 +52,7 @@ class Field(Generic[OO, RO, OF, RF, P]):
         self.translator = withTranslator
         self.setter = withSetter
         self.defaulter = withDefaulter
+        print(self.__str__())
 
     '''
         """
@@ -120,6 +121,11 @@ class Field(Generic[OO, RO, OF, RF, P]):
         return self
     '''
 
-    def toString(self) -> str:
-        return self.id
+    def __str__(self) -> str:
+        import inspect
+        result = self.id
+        for key, _lambda in {"G":self.getter, "D":self.defaulter, "T":self.translator, "V":self.validator, "S":self.setter}.items():
+            if _lambda:
+                result += f" {key}=~{inspect.getsource(_lambda).split(sep='lambda')[1].split(sep=':')[1].strip()}~"
+        return result
 

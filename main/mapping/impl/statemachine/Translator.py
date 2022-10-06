@@ -24,7 +24,7 @@ class Translator(AbstractState):
             return self.doCall(None)
 
     def process(self, field: Field, mappingContext: MappingContext, machineContext: MachineContext):
-        return self.safely(field, mappingContext, machineContext, True, Translator.ClosureAnonymousInnerClass(self, field, mappingContext, machineContext))
+        return self.safely(field, mappingContext, machineContext, True, self.callWithDelegate(field.translator, mappingContext, machineContext.resultValue))
 
 
     def isDefined(self, field):

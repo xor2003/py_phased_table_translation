@@ -8,19 +8,18 @@ from .MachineContext import MachineContext
 class Getter(AbstractState):
     class ClosureAnonymousInnerClass:
 
-        def __init__(self, outerInstance, field, mappingContext):
-            super().__init__()
-            self._outerInstance = outerInstance
-            self._field = field
-            self._mappingContext = mappingContext
+        def __init__(self, _lambda, *args):
+            self._lambda = _lambda
+            self.args = args
 
-        def doCall(self, it):
-            return self._outerInstance.callWithDelegate(self._field.getter, self._mappingContext)
+        def __call__(self):
+            return self._outerInstance.callWithDelegate(self._lambda, self._mappingContext)
 
         def doCall(self):
             return self.doCall(None)
     def process(self, field: Field, mappingContext: MappingContext, machineContext: MachineContext):
-        return self.safely(field, mappingContext, machineContext, True, Getter.ClosureAnonymousInnerClass(self, field, mappingContext))
+        return self.safely(field, mappingContext, machineContext, True,
+                           self.callWithDelegate(field.getter, mappingContext, mappingContext.originalObject))
 
     def isDefined(self, field: Field):
         return field.getter is not None

@@ -24,7 +24,7 @@ class Validator(AbstractState):
             return self.doCall(None)
 
     def process(self, field, mappingContext, machineContext):
-        return self.safely(field, mappingContext, machineContext, False, Validator.ClosureAnonymousInnerClass(self, field, mappingContext, machineContext))
+        return self.safely(field, mappingContext, machineContext, False, self.callWithDelegate(field.validator, mappingContext, machineContext.resultValue))
 
 
 

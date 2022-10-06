@@ -17,15 +17,15 @@ class Defaulter(AbstractState):
             self._field = field
             self._mappingContext = mappingContext
 
-        def doCall(self, it):
+        def __call__(self, it):
             return self._outerInstance.callWithDelegate(self._field.defaulter, self._mappingContext)
 
         def doCall(self):
-            return self.doCall(None)
+            return self.doCall()
 
     def process(self, field: Field, mappingContext: MappingContext, machineContext: MachineContext):
         return self.safely(field, mappingContext, machineContext, True,
-                           Defaulter.ClosureAnonymousInnerClass(self, field, mappingContext))
+                           self.callWithDelegate(field.defaulter, mappingContext))
 
     def isDefined(self, field):
         return field.defaulter is not None

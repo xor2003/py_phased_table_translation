@@ -29,5 +29,5 @@ class ObjectMapper(ABC, Generic[OO, RO, P]):
     #     * @see FieldMapper#mapField
     #     
     @abstractmethod
-    def mapAllFields(self, raw: OO, fields: dict[Field[OO, RO, Any, Any, P], bool], parameters: P) -> RO:
+    def mapAllFields(self, raw: OO, translated: RO, fields: dict[Field[OO, RO, Any, Any, P], bool], parameters: P) -> RO:
         pass

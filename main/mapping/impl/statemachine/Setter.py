@@ -23,7 +23,7 @@ class Setter(AbstractState):
 
     def process(self, field: Field, mappingContext: MappingContext, machineContext: MachineContext):
         return self.safely(field, mappingContext, machineContext, True,
-                           Setter.ClosureAnonymousInnerClass(self, field, mappingContext, machineContext))
+                           self.callWithDelegate(field.setter, mappingContext, machineContext.resultValue))
 
     def isDefined(self, field):
         return field.setter is not None

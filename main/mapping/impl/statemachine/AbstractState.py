@@ -80,16 +80,17 @@ class AbstractState(State):
         assert field
         assert mappingContext
         assert machineContext
-        assert action
+        # assert action
         if not self.isDefined(field):
             if self.onUndefined:
                 return self.onUndefined.process(field, mappingContext, machineContext)
 
-            raise IllegalStateException(f"{self} is undefined for {field} and onUndefined is not set")
+            raise IllegalStateException(f"{self} is undefined for {field.id} and onUndefined is not set")
 
         result = None
         try:
-            result = action()
+            print(f"{field.id} {action}")
+            result = action(action.delegate, *action.args)
         except Exception as e:
             machineContext.error = e
             return self.onException.process(field, mappingContext, machineContext)
@@ -102,7 +103,6 @@ class AbstractState(State):
         else:
             return self.onNonNull.process(field, mappingContext, machineContext)
 
-
         #    *
         #     * Calls closure with specified delegate.
         #     * <p>
@@ -114,10 +114,12 @@ class AbstractState(State):
         #     * @return Whatever closure returns.
         #
 
-
     def callWithDelegate(self, closure, delegate, *args):
-       #clonedClosure = closure.invokeMethod("clone", [])  TODO
-       #clonedClosure.resolveStrategy = Closure.DELEGATE_FIRST
-       #closure.delegate = delegate
-       return closure(delegate, *args)
-
+        # clonedClosure = closure.invokeMethod("clone", [])  TODO
+        # clonedClosure.resolveStrategy = Closure.DELEGATE_FIRST
+        if closure:
+            closure.delegate = delegate
+            if len(args) == 0:
+                args = [None]
+            closure.args = args
+        return closure
