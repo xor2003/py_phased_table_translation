@@ -92,6 +92,7 @@ class AbstractState(State):
             print(f"{field.id} {action}")
             result = action(action.delegate, *action.args)
         except Exception as e:
+            print(e)
             machineContext.error = e
             return self.onException.process(field, mappingContext, machineContext)
 

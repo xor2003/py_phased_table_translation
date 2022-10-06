@@ -8,7 +8,7 @@
 
 from .Warn import Warn
 
-class IllegalArgumentException:
+class IllegalArgumentException(ValueError):
     pass
 
 

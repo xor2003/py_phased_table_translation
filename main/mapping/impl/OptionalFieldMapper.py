@@ -144,13 +144,13 @@ class OptionalFieldMapper(AbstractStateMachineFieldMapper[OO, RO, P]):
         if not field.getter and not field.setter:
             raise IllegalStateException("There are neither getter, nor setter. Can`t do anything with such field.")
 
-        if field.getter and (not field.validator) and not field.setter.asBoolean():
-            if field.defaulter or field.translator.asBoolean():
+        if field.getter and (not field.validator) and not field.setter:
+            if field.defaulter or field.translator:
                 raise IllegalStateException("There is getter but no validator or setter" + " this means we want to show we ignore certain input field." + " This means defaulter or translator make no sense because their result will be ignored")
 
-            return self._ignoreInputFieldStateMachine
+            return self.ignoreInputFieldStateMachine
 
-        if (not field.getter) and (not field.defaulter) and field.setter.asBoolean():
-            return self._ignoreOutputFieldStateMachine
+        if (not field.getter) and (not field.defaulter) and field.setter:
+            return self.ignoreOutputFieldStateMachine
 
-        return self._normalStateMachine
+        return self.normalStateMachine

@@ -106,7 +106,7 @@ class EventsMappingTest:
         0 * eventsMapping.distinguishedNameSerializer.serialize(_) ]] { dict[str, ?] dn ->
             dn.collect { k, v -> "$k=$v" }.join(',')
         '''
-        assert result.size() == 1
+        assert len(result) == 1
         event = result[0]
         assert event['out_notificationType'] == 'notifyNewAlarm'
         assert event['out_alarmType'] == 'CommunicationsAlarm'

@@ -32,5 +32,5 @@ class Validator(AbstractState):
         return field.validator is not None
 
     def isNull(self, value):
-        return (bool(((not value))))
+        return bool(not value)
 
