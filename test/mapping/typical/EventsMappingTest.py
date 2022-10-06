@@ -114,8 +114,7 @@ class EventsMappingTest:
         assert event['out_objectInstance'] == "IRPNetwork=ABCNetwork,Subnet=TN2,BSS=B5C0100"
         assert event['out_notificationId'] == 123
         assert event['out_correlatedNotifications'] == [1, 2]
-        #Instant.from(DateTimeFormatter.ISO_DATE_TIME.parse(event['out_eventTime'] as str)) ==
-        #        Instant.from(DateTimeFormatter.ISO_DATE_TIME.parse("1937-01-01T12:00:27.87+00:20"))
+        assert event['out_eventTime'] == "1937-01-01T12:00:27.870000+00:20"
         assert event['out_systemDN'] == "DC=www.some_example.org, SubNetwork=1, ManagementNode=1, IRPAgent=1"
         assert event['out_alarmId'] == "ABC:5654"
         assert event['out_agentEntity'] == 'configuredAgentEntity'
@@ -129,11 +128,12 @@ class EventsMappingTest:
         assert event['out_technologyDomain'] == 'Mobile'
         assert event['out_equipmentModel'] == "MNM 3000"
         assert event['out_plannedOutageIndication'] == False
-        assert event['out_proposedRepairActions'] is None
-        assert event['out_ackTime'] is None
-        assert event['out_ackUserId'] is None
-        assert event['out_ackState'] is None
-        assert event['out_comments'] is None
+        assert event.get('out_proposedRepairActions') is None
+        assert event.get('out_ackTime') is None
+        assert event.get('out_ackUserId') is None
+        assert event.get('out_ackState') is None
+        assert event.get('out_comments') is None
+        print("Success")
     
 
 

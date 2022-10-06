@@ -1,6 +1,10 @@
+import dateutil.parser
+from datetime import datetime
 from typing import Set, Any, Generic
 
 from main.mapping.Field import Field
+from main.Asgn import Asgn
+
 from main.mapping.ObjectMapper import ObjectMapper
 from test.mapping.typical.DistinguishedNameSerializer import DistinguishedNameSerializer
 from test.mapping.typical.Exchange import Exchange
@@ -13,10 +17,6 @@ from test.mapping.typical.TimeSerializer import TimeSerializer
 OF = TypeVar('OF')
 RF = TypeVar('RF')
 
-
-def set_attr(obj, atr, value):
-    obj[atr] = value
-    # setattr(obj,atr,value)
 
 
 """
@@ -130,116 +130,104 @@ class EventsMapping:
         self.mapper: ObjectMapper[dict[str, object], dict[str, object], EventContext]
         # Mapping table for raise alarm notifications.
         self.notifyNewAlarm: dict[Field[dict[str, object], dict[str, object], Any, Any, EventContext], bool] = {
-            F[dict[str, object], str](
-                withId='objectInstance'
-                , withGetter=(lambda d, it: {key: it[key] for key in self.rtObjectInstanceFields if key in it.keys()})
-                , withValidator=(lambda d, it: (print(it),('in_CLASS_2' in it and 'in_CLASS_1' in it) or 'in_objectInstance' in it))
-                , withSetter=(lambda d, it: set_attr(d.resultObject, 'out_objectInstance', it))): True,
             F[None, str](
                 withId='notificationType'
                 , withDefaulter=(lambda d, it: 'notifyNewAlarm')
-                , withSetter=(lambda d, it: set_attr(d.resultObject, 'out_notificationType', it))): True,
+                , withSetter=(lambda d, it: Asgn(d.resultObject, 'out_notificationType', it))): True,
             F[None, str](
                 withId='agentEntity'
                 , withDefaulter=(lambda d, it: self.configuredAgentEntity)
-                , withSetter=(lambda d, it: set_attr(d.resultObject, 'out_agentEntity', it))): True,
+                , withSetter=(lambda d, it: Asgn(d.resultObject, 'out_agentEntity', it))): True,
             F[str, str](
                 withId='alarmId'
                 , withGetter=(lambda d, it: str(it['in_alarmId']))
                 , withValidator=(lambda d, it: it)
                 , withTranslator=(lambda d, it: it)
-                , withSetter=(lambda d, it: set_attr(d.resultObject, 'out_alarmId', it))): True,
+                , withSetter=(lambda d, it: Asgn(d.resultObject, 'out_alarmId', it))): True,
             F[str, str](
                 withId='alarmType'
                 , withGetter=(lambda d, it: str(it['in_alarmType']))
                 , withValidator=(lambda d, it: it in self.alarmTypes)
                 , withTranslator=(lambda d, it: self.alarmTypes[it])
-                , withSetter=(lambda d, it: set_attr(d.resultObject, 'out_alarmType', it))): True,
+                , withSetter=(lambda d, it: Asgn(d.resultObject, 'out_alarmType', it))): True,
             F[str, str](
                 withId='objectClass'
                 , withGetter=(lambda d, it: str(it['in_objectClass']))
-                , withSetter=(lambda d, it: set_attr(d.resultObject, 'out_objectClass', it))): False,
+                , withSetter=(lambda d, it: Asgn(d.resultObject, 'out_objectClass', it))): False,
+            F[dict[str, object], str](
+                withId='objectInstance'
+                , withGetter=(lambda d, it: {key: it[key] for key in self.rtObjectInstanceFields if key in it.keys()})
+                , withValidator=(lambda d, it: ('in_CLASS_2' in it and 'in_CLASS_1' in it) or 'in_objectInstance' in it)
+                , withTranslator=(lambda d, it: it['in_objectInstance'])
+                , withSetter=(lambda d, it: Asgn(d.resultObject, 'out_objectInstance', it))): True,
             F[int, int](
                 withId='notificationId'
                 , withGetter=(lambda d, it: int(it['in_notificationId']))
-                , withSetter=(lambda d, it: set_attr(d.resultObject, 'out_notificationId', it))): False,
+                , withSetter=(lambda d, it: Asgn(d.resultObject, 'out_notificationId', it))): False,
             F[list[int], list[int]](
                 withId='correlatedNotifications'
                 , withGetter=(lambda d, it: it.get('in_correlatedNotifications', None))
                 , withValidator=(lambda d, it: it)
-                , withSetter=(lambda d, it: set_attr(d.resultObject, 'out_correlatedNotifications', it))): False,
+                , withSetter=(lambda d, it: Asgn(d.resultObject, 'out_correlatedNotifications', it))): False,
             F[str, str](
                 withId='eventTime'
                 , withGetter=(lambda d, it: str(it['in_eventTime']))
-                , withValidator=(lambda d, it: it)
-                , withSetter=(lambda d, it: set_attr(d.resultObject, 'out_eventTime', it))): True,
+                , withValidator=(lambda d, it: dateutil.parser.parse(it) is not None)
+                , withDefaulter=(lambda d, it: datetime.now())
+                , withTranslator=(lambda d, it: dateutil.parser.parse(it).isoformat(sep='T') )
+                , withSetter=(lambda d, it: Asgn(d.resultObject, 'out_eventTime', it))): True,
             F[str, str](
                 withId='systemDN'
                 , withGetter=(lambda d, it: str(it['in_systemDN']))
-                , withSetter=(lambda d, it: set_attr(d.resultObject, 'out_systemDN', it))): False,
+                , withSetter=(lambda d, it: Asgn(d.resultObject, 'out_systemDN', it))): False,
             F[str, str](
                 withId='probableCause'
                 , withGetter=(lambda d, it: str(it['in_probableCause']))
                 , withValidator=(lambda d, it: it in self.probableCauses)
                 , withDefaulter=(lambda d, it: 'indeterminate')
                 , withTranslator=(lambda d, it: self.probableCauses[it])
-                , withSetter=(lambda d, it: set_attr(d.resultObject, 'out_probableCause', it))): True,
+                , withSetter=(lambda d, it: Asgn(d.resultObject, 'out_probableCause', it))): True,
             F[str, str](
                 withId='perceivedSeverity'
                 , withGetter=(lambda d, it: str(it['in_perceivedSeverity']))
                 , withValidator=(lambda d, it: it in self.severities)
                 , withDefaulter=(lambda d, it: 'Indeterminate')
                 , withTranslator=(lambda d, it: self.severities[it])
-                , withSetter=(lambda d, it: set_attr(d.resultObject, 'out_perceivedSeverity', it))): True,
+                , withSetter=(lambda d, it: Asgn(d.resultObject, 'out_perceivedSeverity', it))): True,
             F[list[str], list[str]](
                 withId='specificProblem'
-                , withSetter=(lambda d, it: set_attr(d.resultObject, 'out_specificProblem', it))): False,
+                , withGetter=(lambda d, it: it['in_specificProblem'])
+                , withSetter=(lambda d, it: Asgn(d.resultObject, 'out_specificProblem', it))): False,
             F[str, str](
                 withId='additionalText'
                 , withGetter=(lambda d, it: str(it['in_additionalText']))
-                , withSetter=(lambda d, it: set_attr(d.resultObject, 'out_additionalText', it))): False,
+                , withSetter=(lambda d, it: Asgn(d.resultObject, 'out_additionalText', it))): False,
             F[str, str](
                 withId='siteLocation'
                 , withGetter=(lambda d, it: str(it['in_siteLocation']))
-                , withSetter=(lambda d, it: set_attr(d.resultObject, 'out_siteLocation', it))): False,
+                , withSetter=(lambda d, it: Asgn(d.resultObject, 'out_siteLocation', it))): False,
             F[str, str](
                 withId='regionLocation'
                 , withGetter=(lambda d, it: str(it['in_regionLocation']))
-                , withSetter=(lambda d, it: set_attr(d.resultObject, 'out_regionLocation', it))): False,
+                , withSetter=(lambda d, it: Asgn(d.resultObject, 'out_regionLocation', it))): False,
             F[str, str](
                 withId='vendorName'
                 , withGetter=(lambda d, it: str(it['in_vendorName']))
-                , withSetter=(lambda d, it: set_attr(d.resultObject, 'out_vendorName', it))): False,
+                , withSetter=(lambda d, it: Asgn(d.resultObject, 'out_vendorName', it))): False,
             F[str, str](
                 withId='technologyDomain'
                 , withGetter=(lambda d, it: str(it['in_technologyDomain']))
-                , withSetter=(lambda d, it: set_attr(d.resultObject, 'out_technologyDomain', it))): False,
+                , withSetter=(lambda d, it: Asgn(d.resultObject, 'out_technologyDomain', it))): False,
             F[str, str](
                 withId='equipmentModel'
                 , withGetter=(lambda d, it: str(it['in_equipmentModel']))
-                , withSetter=(lambda d, it: set_attr(d.resultObject, 'out_equipmentModel', it))): False,
+                , withSetter=(lambda d, it: Asgn(d.resultObject, 'out_equipmentModel', it))): False,
             F[bool, bool](
                 withId='plannedOutageIndication'
                 , withGetter=(lambda d, it: bool(it['in_plannedOutageIndication']))
-                , withSetter=(lambda d, it: set_attr(d.resultObject, 'out_plannedOutageIndication', it))): False
+                , withSetter=(lambda d, it: Asgn(d.resultObject, 'out_plannedOutageIndication', it))): False
         }
 
-        '''
-                        ,withGetter { it.findAll { it.key in rtObjectInstanceFields } }
-    
-                            ,withTranslator {
-                            (it['in_objectInstance'] as str) ?:
-                                    distinguishedNameSerializer.serialize([
-                                            CLASS_1: it['in_CLASS_1'],
-                                            CLASS_2: it['in_CLASS_2'],
-                                    ])
-                        }
-    
-                        ,withDefaulter { timeSerializer.serialize(Instant.now()) }
-                        ,withTranslator { timeSerializer.serialize(OffsetDateTime.parse(it).toInstant()) }
-    
-                        ,withGetter { list.cast(it['in_specificProblem'])?.collect { it as str } }
-                        '''
 
     """
      * Maps single real time event.
