@@ -4,8 +4,8 @@
 # 
 #JAVA TO PYTHON CONVERTER TODO TASK: Java annotations have no direct Python equivalent:
 #ORIGINAL LINE: @CompileStatic public class CodeError extends AbstractState
-from AbstractState import AbstractState
-from main.IllegalStateException import IllegalStateException
+from .AbstractState import AbstractState
+from ....IllegalStateException import IllegalStateException
 from .MachineContext import MachineContext
 from ..MessageFormatter import MessageFormatter
 from ...Field import Field

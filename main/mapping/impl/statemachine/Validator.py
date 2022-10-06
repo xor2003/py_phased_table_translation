@@ -2,16 +2,16 @@
 # * Validates result value.
 # 
 
-from AbstractState import AbstractState
+from .AbstractState import AbstractState
 from ...Field import Field
 from ...MappingContext import MappingContext
-from MachineContext import MachineContext
+from .MachineContext import MachineContext
 class Validator(AbstractState):
 
     class ClosureAnonymousInnerClass:
 
         def __init__(self, outerInstance, field: Field, mappingContext: MappingContext, machineContext: MachineContext):
-            super().__init__(outerInstance, outerInstance)
+            super().__init__()
             self._outerInstance = outerInstance
             self._field = field
             self._mappingContext = mappingContext

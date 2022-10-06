@@ -235,10 +235,9 @@ class EventsMapping:
      """
     def mapEvent(self, raw: dict[str, object], batchContext: BatchContext) -> list[dict[str, object]]:
         notificationType: str = 'notifyNewAlarm'
-        event: dict[str, object] = [raw: object.cast(raw)]
         eventContext: EventContext = EventContext(batchContext, notificationType)
-        self.mapper.mapAllFields(raw, event, self.notifyNewAlarm, eventContext)
-        result: list[dict[str, object]] = Collections.singletonList(dict.cast(event))
+        event = self.mapper.mapAllFields(raw, self.notifyNewAlarm, eventContext)
+        result: list[dict[str, object]] = [event]
         return result
     
 

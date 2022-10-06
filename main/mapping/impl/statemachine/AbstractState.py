@@ -10,14 +10,14 @@
 from abc import ABC
 from collections.abc import Callable
 
-from State import State
-from main.IllegalStateException import IllegalStateException
-from main.mapping.Field import Field
-from main.mapping.MappingContext import MappingContext
-from main.mapping.impl.statemachine.MachineContext import MachineContext
+from .State import State
+from ....IllegalStateException import IllegalStateException
+from ...Field import Field
+from ...MappingContext import MappingContext
+from .MachineContext import MachineContext
 
 
-class AbstractState(ABC, State):
+class AbstractState(State):
 
     def __init__(self):
         # instance fields found by Java to Python Converter:

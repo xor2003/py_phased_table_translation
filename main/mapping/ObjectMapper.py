@@ -1,7 +1,7 @@
 from typing import Generic, TypeVar, Any
 from abc import ABC, abstractmethod
 
-from Field import Field
+from .Field import Field
 
 OO = TypeVar('OO')
 RO = TypeVar('RO')
@@ -29,5 +29,5 @@ class ObjectMapper(ABC, Generic[OO, RO, P]):
     #     * @see FieldMapper#mapField
     #     
     @abstractmethod
-    def mapAllFields(self, raw: OO, translated: RO, fields: dict[Field[OO, RO, Any, Any, P], bool], parameters: P):
+    def mapAllFields(self, raw: OO, fields: dict[Field[OO, RO, Any, Any, P], bool], parameters: P) -> RO:
         pass

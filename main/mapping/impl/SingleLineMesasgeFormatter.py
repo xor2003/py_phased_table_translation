@@ -10,12 +10,15 @@
 # *     <li>provided message</li>
 # * </ul>
 #
-from typing import Any
+from typing import Any, TypeVar, Generic
 
-from MessageFormatter import MessageFormatter
+from .MessageFormatter import MessageFormatter
 from ..Field import Field
 from ..MappingContext import MappingContext
 
+OO = TypeVar('OO')
+RO = TypeVar('RO')
+P = TypeVar('P')
 
 class SingleLineMesasgeFormatter(MessageFormatter):
 
@@ -23,7 +26,7 @@ class SingleLineMesasgeFormatter(MessageFormatter):
         self.mandatory: bool = mandatory
 
 
-def formatMessage(self, mappingContext: MappingContext[Any, Any, Any], field: Field[Any, Any, Any, Any, Any],
-                  message: str) -> str:
-    optionality = "mandatory" if self.mandatory else "optional"
-    return f"{message} for {optionality} field {field.id}. " + f"On: ~~~>{mappingContext.originalObject}<~~~" + f" Parameters: {mappingContext.parameters}."
+    def formatMessage(self, mappingContext: MappingContext[Any, Any, Any], field: Field[Any, Any, Any, Any, Any],
+                      message: str) -> str:
+        optionality = "mandatory" if self.mandatory else "optional"
+        return f"{message} for {optionality} field {field.id}. " + f"On: ~~~>{mappingContext.originalObject}<~~~" + f" Parameters: {mappingContext.parameters}."

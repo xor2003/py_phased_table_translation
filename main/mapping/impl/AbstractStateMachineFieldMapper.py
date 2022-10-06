@@ -2,7 +2,8 @@ from typing import TypeVar, Any
 from abc import ABC, abstractmethod
 
 from .statemachine.MachineContext import MachineContext
-from .. import Field, MappingContext
+from ..Field import Field
+from ..MappingContext import MappingContext
 from ..FieldMapper import FieldMapper
 from ...IllegalStateException import IllegalStateException
 
@@ -26,7 +27,7 @@ OO = TypeVar('OO')
 RO = TypeVar('RO')
 P = TypeVar('P')
 
-class AbstractStateMachineFieldMapper(ABC, FieldMapper[OO, RO, P]):
+class AbstractStateMachineFieldMapper(FieldMapper[OO, RO, P]):
 
     def mapField(self, field: Field[OO, RO, Any, Any, P], mappingContext: MappingContext[OO, RO, P]):
         if (not field.setter) and (field.defaulter or field.translator):

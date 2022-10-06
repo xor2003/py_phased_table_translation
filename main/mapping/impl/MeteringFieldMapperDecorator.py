@@ -40,7 +40,7 @@ class MeteringFieldMapperDecorator(GroovyObjectSupport, FieldMapper):
             self._mappingContext = mappingContext
 
         def run(self):
-            delegate.invokeMethod("mapField", [self._field, self._mappingContext])
+            delegate.mapField(self._field, self._mappingContext)
 
 
     def getMetricTimerFactory(self):

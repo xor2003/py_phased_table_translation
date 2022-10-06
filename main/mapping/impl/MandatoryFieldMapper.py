@@ -1,21 +1,21 @@
-from typing import Callable, TypeVar
+from typing import Callable, TypeVar, Any
 
-from AbstractStateMachineFieldMapper import AbstractStateMachineFieldMapper
-from MessageFormatter import MessageFormatter
-from SingleLineMesasgeFormatter import SingleLineMesasgeFormatter
+from .AbstractStateMachineFieldMapper import AbstractStateMachineFieldMapper
+from .MessageFormatter import MessageFormatter
+from .SingleLineMesasgeFormatter import SingleLineMesasgeFormatter
 from ...IllegalStateException import IllegalStateException
 from ..Field import Field
 from ..MappingContext import MappingContext
-from statemachine.CodeError import CodeError
-from statemachine.Defaulter import Defaulter
-from statemachine.End import End
-from statemachine.Getter import Getter
-from statemachine.MachineContext import MachineContext
-from statemachine.Setter import Setter
-from statemachine.State import State
-from statemachine.Translator import Translator
-from statemachine.Validator import Validator
-from statemachine.WarnIfDefinedOrDataError import WarnIfDefinedOrDataError
+from .statemachine.CodeError import CodeError
+from .statemachine.Defaulter import Defaulter
+from .statemachine.End import End
+from .statemachine.Getter import Getter
+from .statemachine.MachineContext import MachineContext
+from .statemachine.Setter import Setter
+from .statemachine.State import State
+from .statemachine.Translator import Translator
+from .statemachine.Validator import Validator
+from .statemachine.WarnIfDefinedOrDataError import WarnIfDefinedOrDataError
 
 OO = TypeVar('OO')
 RO = TypeVar('RO')
@@ -96,12 +96,12 @@ class MandatoryFieldMapper(AbstractStateMachineFieldMapper[OO, RO, P]):
                             CodeError("Defaulter returns null, this makes no sense", messageFormatter),
                             CodeError("Defaulter throws exception", messageFormatter),
                             CodeError('Should never see this as should get data error instead' +
-                        " by the means of {WarnIfDefinedOrDataError.simpleName}", messageFormatter))
+                        " by the means of WarnIfDefinedOrDataError.simpleName", messageFormatter))
         setter.configure(end, end, CodeError("Setter throws exception", messageFormatter), end)
         self.stateMachine = getter
 
 
-    def getStateMachine(self, field: Field[OO, RO, P])-> State:
+    def getStateMachine(self, field: Field[OO, RO, Any, Any, P])-> State:
         if not field.getter and not field.defaulter:
             raise IllegalStateException("Neither getter not defaulter are set" + " - no way to obtain value to validate/translate/set.")
     

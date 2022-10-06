@@ -1,8 +1,8 @@
 from typing import Generic, TypeVar, Any
 from abc import ABC, abstractmethod
 
-from Field import Field
-from MappingContext import MappingContext
+from .Field import Field
+from .MappingContext import MappingContext
 
 OO = TypeVar('OO')
 RO = TypeVar('RO')

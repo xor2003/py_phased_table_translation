@@ -6,7 +6,7 @@
 # * as would be logged.
 # 
 
-from Warn import Warn
+from .Warn import Warn
 
 class IllegalArgumentException:
     pass

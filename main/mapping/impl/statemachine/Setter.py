@@ -1,15 +1,15 @@
 #*
 # * Pushes result value to setter.
 # 
-from AbstractState import AbstractState
+from .AbstractState import AbstractState
 from ...Field import Field
 from ...MappingContext import MappingContext
-from MachineContext import MachineContext
+from .MachineContext import MachineContext
 class Setter(AbstractState):
     class ClosureAnonymousInnerClass:
 
         def __init__(self, outerInstance, field, mappingContext, machineContext):
-            super().__init__(outerInstance, outerInstance)
+            super().__init__()
             self._outerInstance = outerInstance
             self._field = field
             self._mappingContext = mappingContext

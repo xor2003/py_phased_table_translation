@@ -25,15 +25,15 @@ from typing import Callable, TypeVar, Any
 # 
 #JAVA TO PYTHON CONVERTER TODO TASK: Java annotations have no direct Python equivalent:
 #ORIGINAL LINE: @CompileStatic public class OptionalFieldMapper<OO, RO, P> extends AbstractStateMachineFieldMapper<OO, RO, P>
-from AbstractStateMachineFieldMapper import AbstractStateMachineFieldMapper
+from .AbstractStateMachineFieldMapper import AbstractStateMachineFieldMapper
 from .MessageFormatter import MessageFormatter
-from statemachine.Getter import Getter
-from statemachine.Validator import Validator
-from statemachine.Translator import Translator
-from statemachine.Defaulter import Defaulter
-from statemachine.Setter import Setter
-from statemachine.End import End
-from statemachine.Warn import Warn
+from .statemachine.Getter import Getter
+from .statemachine.Validator import Validator
+from .statemachine.Translator import Translator
+from .statemachine.Defaulter import Defaulter
+from .statemachine.Setter import Setter
+from .statemachine.End import End
+from .statemachine.Warn import Warn
 from .SingleLineMesasgeFormatter import SingleLineMesasgeFormatter
 from .statemachine.CodeError import CodeError
 from .statemachine.State import State

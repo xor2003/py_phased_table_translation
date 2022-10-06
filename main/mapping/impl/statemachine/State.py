@@ -5,7 +5,7 @@ from abc import abstractmethod, ABC
 
 from ...Field import Field
 from ...MappingContext import MappingContext
-from MachineContext import MachineContext
+from .MachineContext import MachineContext
 
 
 class State(ABC):

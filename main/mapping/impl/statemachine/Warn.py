@@ -1,12 +1,12 @@
 #*
 # * Pushes a warning to log and then delegates to another step.
 # 
-from AbstractState import AbstractState
+from .AbstractState import AbstractState
 from .State import State
 from ..MessageFormatter import MessageFormatter
 from ...Field import Field
 from ...MappingContext import MappingContext
-from MachineContext import MachineContext
+from .MachineContext import MachineContext
 
 import logging
 

@@ -3,10 +3,10 @@
 # * Does not need to be configured.
 # 
 
-from AbstractState import AbstractState
+from .AbstractState import AbstractState
 from ...Field import Field
 from ...MappingContext import MappingContext
-from MachineContext import MachineContext
+from .MachineContext import MachineContext
 
 class End(AbstractState):
     def process(self, field: Field, mappingContext: MappingContext, machineContext: MachineContext):

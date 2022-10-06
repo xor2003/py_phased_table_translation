@@ -1,13 +1,13 @@
 import json
-from typing import TypeVar
+from typing import TypeVar, Any
 
 import pytest
 
 from main.mapping.impl.SimpleObjectMapper import SimpleObjectMapper
 from test.mapping.typical.DistinguishedNameSerializer import DistinguishedNameSerializer
-#import mock
+from mock import Mock
 
-from test.mapping.typical.EventsMapping import EventsMapping
+from test.mapping.typical.EventsMapping import EventsMapping, BatchContext
 from test.mapping.typical.Exchange import Exchange
 from test.mapping.typical.ExchangeFormatter import ExchangeFormatter
 from test.mapping.typical.TimeSerializer import TimeSerializer
@@ -25,7 +25,7 @@ class EventsMappingTest:
         exchange:Exchange = Mock()
         exchangeFormatter:ExchangeFormatter = Mock()
 
-        self.batchContext: EventsMapping.BatchContext = EventsMapping.BatchContext(
+        self.batchContext: BatchContext = BatchContext(
                 exchangeFormatter,
                 exchange)
 
@@ -56,7 +56,7 @@ class EventsMappingTest:
                 "Minor"        : 'Minor',
                 "Warning"      : 'Warning',
         }
-        mapping.mapper = SimpleObjectMapper[]()
+        mapping.mapper = SimpleObjectMapper[str, str, str]()
         mapping.timeSerializer = Mock(TimeSerializer)
         mapping.distinguishedNameSerializer = Mock(DistinguishedNameSerializer)
         self.eventsMapping = mapping
@@ -137,3 +137,5 @@ class EventsMappingTest:
     
 
 
+e = EventsMappingTest()
+e.notifyNewAlarm()

@@ -16,8 +16,8 @@ from ..Field import Field
 from ..FieldMapper import FieldMapper
 from ..MappingContext import MappingContext
 from ..ObjectMapper import ObjectMapper
-from OptionalFieldMapper import OptionalFieldMapper
-from MandatoryFieldMapper import MandatoryFieldMapper
+from .OptionalFieldMapper import OptionalFieldMapper
+from .MandatoryFieldMapper import MandatoryFieldMapper
 
 OO = TypeVar('OO')
 RO = TypeVar('RO')
@@ -32,11 +32,12 @@ class SimpleObjectMapper(Generic[OO, RO, P], ObjectMapper[OO, RO, P]):
 
         self.mandatoryFieldMapper: FieldMapper[OO, RO, P] = MandatoryFieldMapper[OO, RO, P]()
 
-    def mapAllFields(self, raw: OO, translated: RO, fields: dict[Field[OO, RO, Any, Any, P], bool], parameters: P):
+    def mapAllFields(self, raw: OO, fields: dict[Field[OO, RO, Any, Any, P], bool], parameters: P) -> RO:
         assert raw is not None
-        assert translated is not None
         assert fields is not None
-        mappingContext: MappingContext[OO, RO, P] = MappingContext[OO, RO, P](originalObject=raw, resultObject=translated, parameters=parameters)
+        mappingContext: MappingContext[OO, RO, P] = MappingContext[OO, RO, P](originalObject=raw, resultObject=None, parameters=parameters)
         for field, mandatory in fields.items():
             (self.mandatoryFieldMapper if mandatory else self.optionalFieldMapper).mapField(field, mappingContext)
+        translated: RO = mappingContext.resultObject
+        return translated
 
