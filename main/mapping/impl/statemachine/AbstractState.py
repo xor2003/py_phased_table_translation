@@ -20,7 +20,6 @@ from .MachineContext import MachineContext
 class AbstractState(State):
 
     def __init__(self):
-
         self.onException: State = None
         self.onNull: State = None
         self.onNonNull: State = None
