@@ -38,10 +38,10 @@ class AbstractState(State):
     # JAVA TO PYTHON CONVERTER TODO TASK: Java annotations have no direct Python equivalent:
     # ORIGINAL LINE: public void configure(@Nonnull State onNonNull, @Nonnull State onNull, @Nonnull State onException, @Nonnull State onUndefined)
     def configure(self, onNonNull: State, onNull: State, onException: State, onUndefined: State):
-        assert onNonNull
-        assert onNull
-        assert onException
-        assert onUndefined
+        assert onNonNull is not None
+        assert onNull is not None
+        assert onException is not None
+        assert onUndefined is not None
         self.onException: State = onException
         self.onNull: State = onNull
         self.onNonNull: State = onNonNull
@@ -77,9 +77,9 @@ class AbstractState(State):
     # ORIGINAL LINE: @Nullable @SuppressWarnings("CatchThrowable") protected Object safely(@Nonnull Field field, @Nonnull MappingContext mappingContext, @Nonnull MachineContext machineContext, boolean propagate, @Nonnull Closure action)
     def safely(self, field: Field, mappingContext: MappingContext, machineContext: MachineContext, propagate: bool,
                action: Callable):
-        assert field
-        assert mappingContext
-        assert machineContext
+        assert field is not None
+        assert mappingContext is not None
+        assert machineContext is not None
         # assert action
         if not self.isDefined(field):
             if self.onUndefined:
@@ -119,7 +119,7 @@ class AbstractState(State):
         # clonedClosure = closure.invokeMethod("clone", [])  TODO
         # clonedClosure.resolveStrategy = Closure.DELEGATE_FIRST
         if closure:
-            assert delegate
+            assert delegate is not None
             closure.delegate = delegate
             if len(args) == 0:
                 args = [None]

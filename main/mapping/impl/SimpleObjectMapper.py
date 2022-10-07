@@ -33,7 +33,7 @@ class SimpleObjectMapper(Generic[OO, RO, P], ObjectMapper[OO, RO, P]):
     def mapAllFields(self, raw: OO, translated: RO, fields: dict[Field[OO, RO, Any, Any, P], bool], parameters: P) -> RO:
         assert raw is not None
         assert translated is not None
-        assert fields
+        assert fields is not None
         mappingContext = MappingContext[OO, RO, P](originalObject=raw, resultObject=translated, parameters=parameters)
         for field, mandatory in fields.items():
             (self.mandatoryFieldMapper if mandatory else self.optionalFieldMapper).mapField(field, mappingContext)

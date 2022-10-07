@@ -21,8 +21,8 @@ class CodeError(AbstractState):
     #     
 
     def __init__(self, errorDescription: str, messageFormatter: MessageFormatter):
-        assert errorDescription
-        assert messageFormatter
+        assert errorDescription is not None
+        assert messageFormatter is not None
         self.errorDescription = errorDescription.format(**locals())
         self.messageFormatter = messageFormatter
 

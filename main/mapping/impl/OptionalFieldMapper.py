@@ -135,7 +135,7 @@ class OptionalFieldMapper(AbstractStateMachineFieldMapper[OO, RO, P]):
 
 
     def getStateMachine(self, field: Field[OO, RO, Any, Any, P]) -> State:
-        assert field
+        assert field is not None
         if not field.getter and not field.setter:
             raise IllegalStateException("There are neither getter, nor setter. Can`t do anything with such field.")
 

@@ -14,9 +14,9 @@ logger=logging.getLogger(__name__)
 
 class Warn(AbstractState):
     def process(self, field: Field, mappingContext: MappingContext, machineContext: MachineContext):
-        assert field
-        assert mappingContext
-        assert machineContext
+        assert field is not None
+        assert mappingContext is not None
+        assert machineContext is not None
         if machineContext.error:
             logger.warning(self.createMessage(field, mappingContext, machineContext) + str(machineContext.error))
         else:
@@ -34,8 +34,8 @@ class Warn(AbstractState):
     #     * @param mapper   Mapper used to log message.
     #     
     def __init__(self, delegate: State, messageFormatter: MessageFormatter):
-        assert delegate
-        assert messageFormatter
+        assert delegate is not None
+        assert messageFormatter is not None
         self._delegate = delegate
         self._messageFormatter = messageFormatter
 
