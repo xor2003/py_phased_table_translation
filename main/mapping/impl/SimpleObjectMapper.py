@@ -10,7 +10,7 @@
 # * P - Type of parameters object.
 #
 
-from typing import Generic, TypeVar, Any
+from typing import Generic, TypeVar, Any, Dict
 
 from ..Field import Field
 from ..FieldMapper import FieldMapper
@@ -30,7 +30,7 @@ class SimpleObjectMapper(Generic[OO, RO, P], ObjectMapper[OO, RO, P]):
         self.optionalFieldMapper: FieldMapper[OO, RO, P] = OptionalFieldMapper[OO, RO, P]()
         self.mandatoryFieldMapper: FieldMapper[OO, RO, P] = MandatoryFieldMapper[OO, RO, P]()
 
-    def mapAllFields(self, raw: OO, translated: RO, fields: dict[Field[OO, RO, Any, Any, P], bool], parameters: P) -> RO:
+    def mapAllFields(self, raw: OO, translated: RO, fields: Dict[Field[OO, RO, Any, Any, P], bool], parameters: P) -> RO:
         assert raw is not None
         assert translated is not None
         assert fields is not None
