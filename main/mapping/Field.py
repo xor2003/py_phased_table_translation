@@ -46,7 +46,8 @@ class Field(Generic[OO, RO, OF, RF, P]):
                  withSetter: Callable[[RF], None]=None,
                  withDefaulter: Callable[[], RF]=None
                  ):
-        self.id: str = withId
+        assert withId
+        self.id = withId
         self.getter = withGetter
         self.validator = withValidator
         self.translator = withTranslator

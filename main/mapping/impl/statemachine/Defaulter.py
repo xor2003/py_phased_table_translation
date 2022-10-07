@@ -24,6 +24,9 @@ class Defaulter(AbstractState):
             return self.doCall()
 
     def process(self, field: Field, mappingContext: MappingContext, machineContext: MachineContext):
+        assert field
+        assert mappingContext
+        assert machineContext
         return self.safely(field, mappingContext, machineContext, True,
                            self.callWithDelegate(field.defaulter, mappingContext))
 

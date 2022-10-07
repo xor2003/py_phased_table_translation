@@ -30,17 +30,17 @@ P = TypeVar('P')
 class AbstractStateMachineFieldMapper(FieldMapper[OO, RO, P]):
 
     def mapField(self, field: Field[OO, RO, Any, Any, P], mappingContext: MappingContext[OO, RO, P]):
-        if (not field.setter) and (field.defaulter or field.translator):
-            raise IllegalStateException("Since there is no setter, defaulter and translator make no sense" + " as their result will be ignored.")
-
-        if (not field.getter) and (field.validator or field.translator):
-            raise IllegalStateException("If there is no getter then it's pointless to set " + "validator or translator because they won't be called anyway.")
-
         if mappingContext is None:
             raise IllegalStateException("Translation context must be set")
 
         if field is None:
             raise IllegalStateException("Field descriptor must be set")
+
+        if (not field.setter) and (field.defaulter or field.translator):
+            raise IllegalStateException("Since there is no setter, defaulter and translator make no sense" + " as their result will be ignored.")
+
+        if (not field.getter) and (field.validator or field.translator):
+            raise IllegalStateException("If there is no getter then it's pointless to set " + "validator or translator because they won't be called anyway.")
 
         self.getStateMachine(field).process(field, mappingContext, MachineContext())
 

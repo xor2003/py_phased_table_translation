@@ -6,7 +6,7 @@
 # 
 #JAVA TO PYTHON CONVERTER TODO TASK: Java annotations have no direct Python equivalent:
 #ORIGINAL LINE: @CompileStatic public class PrefixedFieldIdMetricNameCalculator<OO, RO, P> extends GroovyObjectSupport implements MetricNameCalculator<OO, RO, P>
-class PrefixedFieldIdMetricNameCalculator(GroovyObjectSupport, MetricNameCalculator):
+class PrefixedFieldIdMetricNameCalculator(MetricNameCalculator):
     #    *
     #     * Creates instance.
     #     *

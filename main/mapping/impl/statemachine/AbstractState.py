@@ -119,6 +119,7 @@ class AbstractState(State):
         # clonedClosure = closure.invokeMethod("clone", [])  TODO
         # clonedClosure.resolveStrategy = Closure.DELEGATE_FIRST
         if closure:
+            assert delegate
             closure.delegate = delegate
             if len(args) == 0:
                 args = [None]

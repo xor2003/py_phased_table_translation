@@ -14,6 +14,9 @@ logger=logging.getLogger(__name__)
 
 class Warn(AbstractState):
     def process(self, field: Field, mappingContext: MappingContext, machineContext: MachineContext):
+        assert field
+        assert mappingContext
+        assert machineContext
         if machineContext.error:
             logger.warning(self.createMessage(field, mappingContext, machineContext) + str(machineContext.error))
         else:

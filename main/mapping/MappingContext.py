@@ -6,7 +6,7 @@
 # * P - Type of parameters object.
 # 
 
-from typing import Generic, TypeVar, Any
+from typing import Generic, TypeVar, Any, Optional
 
 OO = TypeVar('OO')
 RO = TypeVar('RO')
@@ -23,7 +23,7 @@ class MappingContext(Generic[OO, RO, P]):
         #
         #     * Additional translator parameters passed from outside.
         #
-        self.originalObject: OO = originalObject
-        self.resultObject: RO = resultObject
-        self.parameters: P = parameters
+        self.originalObject = originalObject
+        self.resultObject = resultObject
+        self.parameters = parameters
 

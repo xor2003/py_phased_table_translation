@@ -18,6 +18,9 @@ class Getter(AbstractState):
         def doCall(self):
             return self.doCall(None)
     def process(self, field: Field, mappingContext: MappingContext, machineContext: MachineContext):
+        assert field
+        assert mappingContext
+        assert machineContext
         return self.safely(field, mappingContext, machineContext, True,
                            self.callWithDelegate(field.getter, mappingContext, mappingContext.originalObject))
 

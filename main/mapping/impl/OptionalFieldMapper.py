@@ -128,14 +128,9 @@ class OptionalFieldMapper(AbstractStateMachineFieldMapper[OO, RO, P]):
         self.normalStateMachine = OptionalFieldMapper.createNormalStateMachine(messageFormatter)
         self.ignoreInputFieldStateMachine = OptionalFieldMapper.createIgnoreInputFieldStateMachine()
         self.ignoreOutputFieldStateMachine = OptionalFieldMapper.createIgnoreOutputFieldStateMachine()
-
-#    *
-#     * Creates new instance.
-#     *
-#     * @param messageFormatterFactory Factory for formatter of error messages or null
-#     *                                if {@link SingleLineMesasgeFormatter} should be used.
-#     
-
+        assert self.normalStateMachine
+        assert self.ignoreInputFieldStateMachine
+        assert self.ignoreOutputFieldStateMachine
 
 
 

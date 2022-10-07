@@ -28,5 +28,8 @@ class SingleLineMesasgeFormatter(MessageFormatter):
 
     def formatMessage(self, mappingContext: MappingContext[Any, Any, Any], field: Field[Any, Any, Any, Any, Any],
                       message: str) -> str:
+        assert field
+        assert mappingContext
+        assert message
         optionality = "mandatory" if self.mandatory else "optional"
         return f"{message} for {optionality} field {field.id}. " + f"On: ~~~>{mappingContext.originalObject}<~~~" + f" Parameters: {mappingContext.parameters}."

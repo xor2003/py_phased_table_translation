@@ -102,6 +102,7 @@ class MandatoryFieldMapper(AbstractStateMachineFieldMapper[OO, RO, P]):
 
 
     def getStateMachine(self, field: Field[OO, RO, Any, Any, P])-> State:
+        assert field
         if not field.getter and not field.defaulter:
             raise IllegalStateException("Neither getter not defaulter are set" + " - no way to obtain value to validate/translate/set.")
     

@@ -10,6 +10,7 @@ from .MachineContext import MachineContext
 
 class End(AbstractState):
     def process(self, field: Field, mappingContext: MappingContext, machineContext: MachineContext):
+        assert machineContext
         return machineContext.resultValue
 
     def isDefined(self, field: Field):
