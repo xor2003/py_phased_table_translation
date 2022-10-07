@@ -1,6 +1,6 @@
 import dateutil.parser
 from datetime import datetime
-from typing import Set, Any, Generic
+from typing import Set, Any, Generic, Dict, List
 
 from main.mapping.Field import Field
 from main.Asgn import Asgn
@@ -69,7 +69,7 @@ class EventContext:
  """
 
 
-class F(Generic[OF, RF], Field[dict[str, object], dict[str, object], OF, RF, EventContext]):
+class F(Generic[OF, RF], Field[Dict[str, object], Dict[str, object], OF, RF, EventContext]):
     pass
 
 
@@ -154,7 +154,7 @@ class EventsMapping:
                 withId='objectClass'
                 , withGetter=(lambda d, it: str(it['in_objectClass']))
                 , withSetter=(lambda d, it: Asgn(d.resultObject, 'out_objectClass', it))): False,
-            F[dict[str, object], str](
+            F[Dict[str, object], str](
                 withId='objectInstance'
                 , withGetter=(lambda d, it: {key: it[key] for key in self.rtObjectInstanceFields if key in it.keys()})
                 , withValidator=(lambda d, it: ('in_CLASS_2' in it and 'in_CLASS_1' in it) or 'in_objectInstance' in it)
@@ -164,7 +164,7 @@ class EventsMapping:
                 withId='notificationId'
                 , withGetter=(lambda d, it: int(it['in_notificationId']))
                 , withSetter=(lambda d, it: Asgn(d.resultObject, 'out_notificationId', it))): False,
-            F[list[int], list[int]](
+            F[List[int], List[int]](
                 withId='correlatedNotifications'
                 , withGetter=(lambda d, it: it.get('in_correlatedNotifications', None))
                 , withValidator=(lambda d, it: it)
@@ -194,7 +194,7 @@ class EventsMapping:
                 , withDefaulter=(lambda d, it: 'Indeterminate')
                 , withTranslator=(lambda d, it: self.severities[it])
                 , withSetter=(lambda d, it: Asgn(d.resultObject, 'out_perceivedSeverity', it))): True,
-            F[list[str], list[str]](
+            F[List[str], List[str]](
                 withId='specificProblem'
                 , withGetter=(lambda d, it: it['in_specificProblem'])
                 , withSetter=(lambda d, it: Asgn(d.resultObject, 'out_specificProblem', it))): False,
@@ -234,13 +234,13 @@ class EventsMapping:
      *
      :param raw: Incoming event.
      :param batchContext: Mapping context.
-     * @return list of outgoing mapped events.
+     * @return List of outgoing mapped events.
      """
 
-    def mapEvent(self, raw: dict[str, object], batchContext: BatchContext) -> list[dict[str, object]]:
+    def mapEvent(self, raw: Dict[str, object], batchContext: BatchContext) -> List[Dict[str, object]]:
         notificationType: str = 'notifyNewAlarm'
         eventContext: EventContext = EventContext(batchContext, notificationType)
         event = dict()
         event = self.mapper.mapAllFields(raw, event, self.notifyNewAlarm, eventContext)
-        result: list[dict[str, object]] = [event]
+        result: List[Dict[str, object]] = [event]
         return result

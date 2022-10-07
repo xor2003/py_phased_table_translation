@@ -1,8 +1,8 @@
 from abc import ABC
-from typing import Any
+from typing import Any, Dict
 
 
 class DistinguishedNameSerializer(ABC):
 
-    def serialize(self, pairs: dict[str, Any]) -> str:
+    def serialize(self, pairs: Dict[str, Any]) -> str:
         pass
