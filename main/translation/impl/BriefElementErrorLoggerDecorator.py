@@ -22,7 +22,7 @@ class BriefElementErrorLoggerDecorator(GroovyObjectSupport, AroundElement):
     #    *
     #     * Creates instance.
     #     *
-    #     * @param next Translator to be decorated.
+    #     :param next: Translator to be decorated.
     #     
 #JAVA TO PYTHON CONVERTER TODO TASK: Java annotations have no direct Python equivalent:
 #ORIGINAL LINE: public BriefElementErrorLoggerDecorator(@Nonnull AroundElement<C> next)

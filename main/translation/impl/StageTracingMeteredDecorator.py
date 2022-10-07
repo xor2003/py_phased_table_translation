@@ -11,10 +11,10 @@ class StageTracingMeteredDecorator(StageTracingDecorator):
     #    *
     #     * Creates new instance.
     #     *
-    #     * @param next           Translator to be decorated.
-    #     * @param dumper         Stage dumper.
-    #     * @param metricRegistry Registry where to report metric.
-    #     * @param metricName     Name of metric that will hold tracing time.
+    #     :param next:           Translator to be decorated.
+    #     :param dumper:         Stage dumper.
+    #     :param metricRegistry: Registry where to report metric.
+    #     :param metricName:     Name of metric that will hold tracing time.
     #     
 #JAVA TO PYTHON CONVERTER TODO TASK: There is no Python equivalent to multiple constructors:
 #ORIGINAL LINE: public StageTracingMeteredDecorator(AroundStage<C> next, StageDumper<C> dumper, MetricRegistry metricRegistry, String metricName)
@@ -33,11 +33,11 @@ class StageTracingMeteredDecorator(StageTracingDecorator):
     #    *
     #     * Creates new instance.
     #     *
-    #     * @param next           Translator to be decorated.
-    #     * @param dumper         Stage dumper.
-    #     * @param metricRegistry Registry where to report metric.
-    #     * @param metricName     Name of metric that will hold tracing time.
-    #     * @param timerFactory   Factory to be used to create timer metric.
+    #     :param next:           Translator to be decorated.
+    #     :param dumper:         Stage dumper.
+    #     :param metricRegistry: Registry where to report metric.
+    #     :param metricName:     Name of metric that will hold tracing time.
+    #     :param timerFactory:   Factory to be used to create timer metric.
     #     
 #JAVA TO PYTHON CONVERTER TODO TASK: There is no Python equivalent to multiple constructors:
 #ORIGINAL LINE: public StageTracingMeteredDecorator(AroundStage<C> next, StageDumper<C> dumper, MetricRegistry metricRegistry, String metricName, MetricSupplier<Timer> timerFactory)

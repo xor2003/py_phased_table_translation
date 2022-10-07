@@ -17,9 +17,9 @@ class ElementErrorMeteringDecorator(GroovyObjectSupport, AroundElement):
     #    *
     #     * Creates an instance.
     #     *
-    #     * @param next            Translator to be decorated.
-    #     * @param metricRegistry  Metric registry where metric should be reported to.
-    #     * @param metricsBaseName Base name (prefix) for metrics.
+    #     :param next:            Translator to be decorated.
+    #     :param metricRegistry:  Metric registry where metric should be reported to.
+    #     :param metricsBaseName: Base name (prefix) for metrics.
     #     
 #JAVA TO PYTHON CONVERTER TODO TASK: Java annotations have no direct Python equivalent:
 #ORIGINAL LINE: public ElementErrorMeteringDecorator(@Nonnull AroundElement<C> next, @Nonnull MetricRegistry metricRegistry, @Nonnull String metricsBaseName)

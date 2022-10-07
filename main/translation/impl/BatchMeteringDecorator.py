@@ -45,9 +45,9 @@ class BatchMeteringDecorator(GroovyObjectSupport, BatchTranslator):
     #    *
     #     * Creates new instance.
     #     *
-    #     * @param next            Translator to be decorated.
-    #     * @param metricRegistry  Registry where to publish metrics.
-    #     * @param metricsBaseName Base name (prefix) of the metrics.
+    #     :param next:            Translator to be decorated.
+    #     :param metricRegistry:  Registry where to publish metrics.
+    #     :param metricsBaseName: Base name (prefix) of the metrics.
     #     
 #JAVA TO PYTHON CONVERTER TODO TASK: Java annotations have no direct Python equivalent:
 #ORIGINAL LINE: public BatchMeteringDecorator(@Nonnull BatchTranslator<O, R, C> next, @Nonnull MetricRegistry metricRegistry, @Nonnull String metricsBaseName)

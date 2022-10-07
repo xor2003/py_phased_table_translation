@@ -13,11 +13,11 @@ class BatchTracingMeteredDecorator(BatchTracingDecorator):
     #    *
     #     * Creates new instance.
     #     *
-    #     * @param next           Translator to be decorated.
-    #     * @param inDumper       Dumper for original batch.
-    #     * @param outDumper      Dumper for resulting batch.
-    #     * @param metricRegistry Registry where to report metric.
-    #     * @param metricName     Name of metric that will hold tracing time.
+    #     :param next:           Translator to be decorated.
+    #     :param inDumper:       Dumper for original batch.
+    #     :param outDumper:      Dumper for resulting batch.
+    #     :param metricRegistry: Registry where to report metric.
+    #     :param metricName:     Name of metric that will hold tracing time.
     #     
 #JAVA TO PYTHON CONVERTER TODO TASK: There is no Python equivalent to multiple constructors:
 #ORIGINAL LINE: public BatchTracingMeteredDecorator(BatchTranslator<O, R, C> next, BatchDumper<O, C> inDumper, BatchDumper<R, C> outDumper, MetricRegistry metricRegistry, String metricName)
@@ -36,12 +36,12 @@ class BatchTracingMeteredDecorator(BatchTracingDecorator):
     #    *
     #     * Creates new instance.
     #     *
-    #     * @param next           Translator to be decorated.
-    #     * @param inDumper       Dumper for original batch.
-    #     * @param outDumper      Dumper for resulting batch.
-    #     * @param metricRegistry Registry where to report metric.
-    #     * @param metricName     Name of metric that will hold tracing time.
-    #     * @param timerFactory   Factory to be used to create metric.
+    #     :param next:           Translator to be decorated.
+    #     :param inDumper:       Dumper for original batch.
+    #     :param outDumper:      Dumper for resulting batch.
+    #     :param metricRegistry: Registry where to report metric.
+    #     :param metricName:     Name of metric that will hold tracing time.
+    #     :param timerFactory:   Factory to be used to create metric.
     #     
 #JAVA TO PYTHON CONVERTER TODO TASK: Java annotations have no direct Python equivalent:
 #ORIGINAL LINE: @SuppressWarnings("ParameterCount") public BatchTracingMeteredDecorator(BatchTranslator<O, R, C> next, BatchDumper<O, C> inDumper, BatchDumper<R, C> outDumper, MetricRegistry metricRegistry, String metricName, MetricSupplier<Timer> timerFactory)

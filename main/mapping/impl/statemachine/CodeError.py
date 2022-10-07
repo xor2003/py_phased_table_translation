@@ -2,8 +2,8 @@
 # * Represents code error.
 # * Does not need to be configured.
 # 
-#JAVA TO PYTHON CONVERTER TODO TASK: Java annotations have no direct Python equivalent:
-#ORIGINAL LINE: @CompileStatic public class CodeError extends AbstractState
+
+
 from .AbstractState import AbstractState
 from ....IllegalStateException import IllegalStateException
 from .MachineContext import MachineContext
@@ -16,8 +16,8 @@ class CodeError(AbstractState):
     #    *
     #     * Creates new instance.
     #     *
-    #     * @param errorDescription Explanation of error.
-    #     * @param messageFormatter Formatter of error message.
+    #     :param errorDescription: Explanation of error.
+    #     :param messageFormatter: Formatter of error message.
     #     
 
     def __init__(self, errorDescription: str, messageFormatter: MessageFormatter):

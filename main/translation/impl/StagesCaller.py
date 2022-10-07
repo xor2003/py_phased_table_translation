@@ -16,8 +16,8 @@ class StagesCaller(GroovyObjectSupport, BatchTranslator):
     #    *
     #     * Creates an instance.
     #     *
-    #     * @param processingStages Definition of processing stages.
-    #     * @param aroundStage      What to do for each stage.
+    #     :param processingStages: Definition of processing stages.
+    #     :param aroundStage:      What to do for each stage.
     #     * @see StagesCaller#processingStages
     #     * @see StagesCaller#aroundStage
     #     

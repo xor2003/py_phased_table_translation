@@ -16,8 +16,8 @@ class WarnIfDefinedOrDataError(Warn):
     #    *
     #     * Creates instance.
     #     *
-    #     * @param delegate Step to delegate to after logging.
-    #     * @param mapper   Mapper used to log message.
+    #     :param delegate: Step to delegate to after logging.
+    #     :param mapper:   Mapper used to log message.
     #     
     def __init__(self, delegate, messageFactory):
         super().__init__(delegate, messageFactory)

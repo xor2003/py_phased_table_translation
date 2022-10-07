@@ -30,8 +30,8 @@ class Warn(AbstractState):
     #    *
     #     * Creates instance.
     #     *
-    #     * @param delegate Step to delegate to after logging.
-    #     * @param mapper   Mapper used to log message.
+    #     :param delegate: Step to delegate to after logging.
+    #     :param mapper:   Mapper used to log message.
     #     
     def __init__(self, delegate: State, messageFormatter: MessageFormatter):
         assert delegate is not None
@@ -42,9 +42,9 @@ class Warn(AbstractState):
     #    *
     #     * Create message to be logged.
     #     *
-    #     * @param field          Field configuration.
-    #     * @param mappingContext Translation context.
-    #     * @param machineContext State machine context.
+    #     :param field:          Field configuration.
+    #     :param mappingContext: Translation context.
+    #     :param machineContext: State machine context.
     #     * @return Message to be logged.
     #     
     def createMessage(self, field: Field, mappingContext: MappingContext, machineContext: MachineContext):

@@ -12,7 +12,7 @@ class ActualStageProcessor(GroovyObjectSupport, AroundStage):
     #    *
     #     * Creates an instance.
     #     *
-    #     * @param aroundElement Processing to apply to each element of a batch.
+    #     :param aroundElement: Processing to apply to each element of a batch.
     #     
 #JAVA TO PYTHON CONVERTER TODO TASK: Java annotations have no direct Python equivalent:
 #ORIGINAL LINE: public ActualStageProcessor(@Nonnull AroundElement<C> aroundElement)

@@ -18,8 +18,8 @@ class StageTracingDecorator(GroovyObjectSupport, AroundStage):
     #    *
     #     * Creates new instance.
     #     *
-    #     * @param next   Translator to be decorated.
-    #     * @param dumper Stage dumper.
+    #     :param next:   Translator to be decorated.
+    #     :param dumper: Stage dumper.
     #     
 #JAVA TO PYTHON CONVERTER TODO TASK: Java annotations have no direct Python equivalent:
 #ORIGINAL LINE: public StageTracingDecorator(@Nonnull AroundStage<C> next, @Nonnull StageDumper<C> dumper)
@@ -46,9 +46,9 @@ class StageTracingDecorator(GroovyObjectSupport, AroundStage):
     #    *
     #     * Traces input elements.
     #     *
-    #     * @param stageName Name of stage being traced.
-    #     * @param elements  Stage input elements.
-    #     * @param context   Translation context.
+    #     :param stageName: Name of stage being traced.
+    #     :param elements:  Stage input elements.
+    #     :param context:   Translation context.
     #     
 #JAVA TO PYTHON CONVERTER TODO TASK: Java annotations have no direct Python equivalent:
 #ORIGINAL LINE: protected void traceIn(@Nonnull String stageName, @Nonnull List<?> elements, @Nullable C context)
@@ -61,9 +61,9 @@ class StageTracingDecorator(GroovyObjectSupport, AroundStage):
     #    *
     #     * Traces output elements.
     #     *
-    #     * @param stageName Name of stage being traced.
-    #     * @param elements  Stage output elements.
-    #     * @param context   Translation context.
+    #     :param stageName: Name of stage being traced.
+    #     :param elements:  Stage output elements.
+    #     :param context:   Translation context.
     #     
 #JAVA TO PYTHON CONVERTER TODO TASK: Java annotations have no direct Python equivalent:
 #ORIGINAL LINE: protected void traceOut(@Nonnull String stageName, @Nonnull List<?> elements, @Nullable C context)

@@ -7,22 +7,6 @@ from ...MappingContext import MappingContext
 from .MachineContext import MachineContext
 class Translator(AbstractState):
 
-    class ClosureAnonymousInnerClass:
-
-        def __init__(self, outerInstance, field, mappingContext, machineContext):
-            super().__init__()
-            self._outerInstance = outerInstance
-            self._field = field
-            self._mappingContext = mappingContext
-            self._machineContext = machineContext
-
-        def doCall(self, it):
-            return self._outerInstance.callWithDelegate(self._field.translator, self._mappingContext,
-                                                        self._machineContext.resultValue)
-
-        def doCall(self):
-            return self.doCall(None)
-
     def process(self, field: Field, mappingContext: MappingContext, machineContext: MachineContext):
         assert field is not None
         assert mappingContext is not None

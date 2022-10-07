@@ -10,8 +10,8 @@ class BatchDumper(GroovyObjectSupport):
     #    *
     #     * Dumps specified batch of elements to string.
     #     *
-    #     * @param batch   Batch to be dumped or null if not specified.
-    #     * @param context Translation context or null if not specified.
+    #     :param batch:   Batch to be dumped or null if not specified.
+    #     :param context: Translation context or null if not specified.
     #     * @return String representation of batch and/or context.
     #     
 #JAVA TO PYTHON CONVERTER TODO TASK: Java annotations have no direct Python equivalent:

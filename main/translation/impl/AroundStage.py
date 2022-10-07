@@ -7,10 +7,10 @@ class AroundStage(GroovyObjectSupport):
     #    *
     #     * Applies specified translation stage to a batch of elements.
     #     *
-    #     * @param stageName Name of translation stage to be applied.
-    #     * @param stageCode Code of translation stage to be applied.
-    #     * @param elements  Batch of elements to be translated.
-    #     * @param context   Translation context or null if not specified.
+    #     :param stageName: Name of translation stage to be applied.
+    #     :param stageCode: Code of translation stage to be applied.
+    #     :param elements:  Batch of elements to be translated.
+    #     :param context:   Translation context or null if not specified.
     #     * @return Result of translating elements using specified stage.
     #     
 #JAVA TO PYTHON CONVERTER TODO TASK: Java annotations have no direct Python equivalent:

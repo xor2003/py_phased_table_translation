@@ -27,8 +27,8 @@ RF = TypeVar('RF')
 class BatchContext:
     """
      * Creates instance.
-     * @param exchangeFormatter Formatter used to dump exchange that is being processed.
-     * @param exchange Exchange that is being processed.
+     :param exchangeFormatter: Formatter used to dump exchange that is being processed.
+     :param exchange: Exchange that is being processed.
      """
 
     def __init__(self, exchangeFormatter: ExchangeFormatter,
@@ -53,8 +53,8 @@ class EventContext:
      * Name of the mapping table being used to map fields of event.
 
      * Creates instance.
-     * @param batchContext Context of a batch.
-     * @param mappingTableName Name of the mapping table being used to map the event.
+     :param batchContext: Context of a batch.
+     :param mappingTableName: Name of the mapping table being used to map the event.
      """
 
     def __init__(self, batchContext: BatchContext, mappingTableName: str):
@@ -232,8 +232,8 @@ class EventsMapping:
     """
      * Maps single real time event.
      *
-     * @param raw Incoming event.
-     * @param batchContext Mapping context.
+     :param raw: Incoming event.
+     :param batchContext: Mapping context.
      * @return list of outgoing mapped events.
      """
 

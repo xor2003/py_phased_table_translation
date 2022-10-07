@@ -48,8 +48,8 @@ class ResilientBatchTranslator(GroovyObjectSupport):
     #    *
     #     * Translates a batch of elements.
     #     *
-    #     * @param events  Elements to translate.
-    #     * @param context Extra parameters to pass to pre-, post-processor and translator (optional, can be null).
+    #     :param events:  Elements to translate.
+    #     :param context: Extra parameters to pass to pre-, post-processor and translator (optional, can be null).
     #     * @return Translated elements.
     #     * @see #processingStages
     #     
@@ -71,8 +71,8 @@ class ResilientBatchTranslator(GroovyObjectSupport):
     #    *
     #     * Translates a batch of elements.
     #     *
-    #     * @param events  Elements to translate.
-    #     * @param context Extra parameters to pass to pre-, post-processor and translator (optional, can be null).
+    #     :param events:  Elements to translate.
+    #     :param context: Extra parameters to pass to pre-, post-processor and translator (optional, can be null).
     #     * @return Translated elements.
     #     * @see #processingStages
     #     
@@ -92,10 +92,10 @@ class ResilientBatchTranslator(GroovyObjectSupport):
     #     * <p>
     #     * The result is made null-safe: is never null and any null elements removed.
     #     *
-    #     * @param event     Event to process.
-    #     * @param context   Context passed to translator.
-    #     * @param stageName Name of processing stage (for logging).
-    #     * @param stageCode Code of processing stage.
+    #     :param event:     Event to process.
+    #     :param context:   Context passed to translator.
+    #     :param stageName: Name of processing stage (for logging).
+    #     :param stageCode: Code of processing stage.
     #     * @return Result of applying stageCode to event and context.
     #     
 #JAVA TO PYTHON CONVERTER TODO TASK: Java annotations have no direct Python equivalent:
@@ -117,7 +117,7 @@ class ResilientBatchTranslator(GroovyObjectSupport):
     #    *
     #     * Gets safer list.
     #     *
-    #     * @param list Source list.
+    #     :param list: Source list.
     #     * @return Empty list of source is null. Otherwise, same as source but without null elements.
     #     
 #JAVA TO PYTHON CONVERTER TODO TASK: Java annotations have no direct Python equivalent:

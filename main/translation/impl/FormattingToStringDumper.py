@@ -72,7 +72,7 @@ class FormattingToStringDumper(GroovyObjectSupport, BatchDumper, StageDumper):
     #     * By default, will allocate new buffer using batch size
     #     * and {@link #estimatedDumpedEventSize} to try to avoid resizing.
     #     *
-    #     * @param batch Batch to be dumped or null if none.
+    #     :param batch: Batch to be dumped or null if none.
     #     * @return Buffer where batch should be dumped.
     #     
 #JAVA TO PYTHON CONVERTER TODO TASK: Java annotations have no direct Python equivalent:

@@ -12,7 +12,7 @@ class State(ABC):
     #    *
     #     * Is current step configured in field configuration?
     #     *
-    #     * @param field Field configuration.
+    #     :param field: Field configuration.
     #     * @return true if current step is configured for a field.
     #     
     @abstractmethod
@@ -23,9 +23,9 @@ class State(ABC):
 
     #     * Do the work related to the step.
     #     *
-    #     * @param field          Definition of the field.
-    #     * @param mappingContext Mapping context.
-    #     * @param machineContext State machine context.
+    #     :param field:          Definition of the field.
+    #     :param mappingContext: Mapping context.
+    #     :param machineContext: State machine context.
     #     * @return Result of current step evaluation.
     #     
 

@@ -47,7 +47,7 @@ class AbstractStateMachineFieldMapper(FieldMapper[OO, RO, P]):
     #    *
     #     * Gets state machine for this field mapper.
     #     *
-    #     * @param field Field to be translated.
+    #     :param field: Field to be translated.
     #     * @return Starting state of state machine.
     #     
     @abstractmethod

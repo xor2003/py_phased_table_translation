@@ -22,9 +22,9 @@ class BatchTracingDecorator(GroovyObjectSupport, BatchTranslator):
     #    *
     #     * Creates new instance.
     #     *
-    #     * @param next      Translator to be decorated.
-    #     * @param inDumper  Dumper for original batch.
-    #     * @param outDumper Dumper for resulting batch.
+    #     :param next:      Translator to be decorated.
+    #     :param inDumper:  Dumper for original batch.
+    #     :param outDumper: Dumper for resulting batch.
     #     
 #JAVA TO PYTHON CONVERTER TODO TASK: Java annotations have no direct Python equivalent:
 #ORIGINAL LINE: public BatchTracingDecorator(@Nonnull BatchTranslator<O, R, C> next, @Nonnull BatchDumper<O, C> inDumper, @Nonnull BatchDumper<R, C> outDumper)
@@ -53,8 +53,8 @@ class BatchTracingDecorator(GroovyObjectSupport, BatchTranslator):
     #    *
     #     * Traces input elements.
     #     *
-    #     * @param elements Input elements.
-    #     * @param context  Translation context.
+    #     :param elements: Input elements.
+    #     :param context:  Translation context.
     #     
 #JAVA TO PYTHON CONVERTER TODO TASK: Java annotations have no direct Python equivalent:
 #ORIGINAL LINE: protected void traceIn(@Nullable List<O> elements, @Nullable C context)
@@ -66,8 +66,8 @@ class BatchTracingDecorator(GroovyObjectSupport, BatchTranslator):
     #    *
     #     * Traces output elements.
     #     *
-    #     * @param elements Output elements.
-    #     * @param context  Translation context.
+    #     :param elements: Output elements.
+    #     :param context:  Translation context.
     #     
 #JAVA TO PYTHON CONVERTER TODO TASK: Java annotations have no direct Python equivalent:
 #ORIGINAL LINE: protected void traceOut(@Nullable List<R> elements, @Nullable C context)

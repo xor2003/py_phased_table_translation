@@ -23,8 +23,8 @@ from typing import Callable, TypeVar, Any
 # * RO - Resulting object type.
 # * P - Type of parameters object.
 # 
-#JAVA TO PYTHON CONVERTER TODO TASK: Java annotations have no direct Python equivalent:
-#ORIGINAL LINE: @CompileStatic public class OptionalFieldMapper<OO, RO, P> extends AbstractStateMachineFieldMapper<OO, RO, P>
+
+
 from .AbstractStateMachineFieldMapper import AbstractStateMachineFieldMapper
 from .MessageFormatter import MessageFormatter
 from .statemachine.Getter import Getter
@@ -118,11 +118,11 @@ class OptionalFieldMapper(AbstractStateMachineFieldMapper[OO, RO, P]):
 #    *
 #     * Creates new instance.
 #     *
-#     * @param messageFormatterFactory Factory for formatter of error messages or null
+#     :param messageFormatterFactory: Factory for formatter of error messages or null
 #     *                                if {@link SingleLineMesasgeFormatter} should be used.
 #     
-#JAVA TO PYTHON CONVERTER TODO TASK: Java annotations have no direct Python equivalent:
-#ORIGINAL LINE: @SuppressWarnings public OptionalFieldMapper(Closure<MessageFormatter> messageFormatterFactory)
+
+
     def __init__(self, messageFormatterFactory: Callable[...,MessageFormatter]=None):
         messageFormatter:MessageFormatter = messageFormatterFactory() if messageFormatterFactory else SingleLineMesasgeFormatter(mandatory=False)
         self.normalStateMachine = OptionalFieldMapper.createNormalStateMachine(messageFormatter)

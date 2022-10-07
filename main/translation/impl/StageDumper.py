@@ -10,9 +10,9 @@ class StageDumper(GroovyObjectSupport):
     #    *
     #     * Dumps batch before specified stage.
     #     *
-    #     * @param stageName Name of stage.
-    #     * @param batch     Batch of elements or null if none.
-    #     * @param context   Translation context or null if none.
+    #     :param stageName: Name of stage.
+    #     :param batch:     Batch of elements or null if none.
+    #     :param context:   Translation context or null if none.
     #     * @return String representation of parameters.
     #     
 #JAVA TO PYTHON CONVERTER TODO TASK: Java annotations have no direct Python equivalent:
@@ -23,9 +23,9 @@ class StageDumper(GroovyObjectSupport):
     #    *
     #     * Dumps batch after specified stage.
     #     *
-    #     * @param stageName Name of stage.
-    #     * @param batch     Batch of elements or null if none.
-    #     * @param context   Translation context or null if none.
+    #     :param stageName: Name of stage.
+    #     :param batch:     Batch of elements or null if none.
+    #     :param context:   Translation context or null if none.
     #     * @return String representation of parameters.
     #     
 #JAVA TO PYTHON CONVERTER TODO TASK: Java annotations have no direct Python equivalent:

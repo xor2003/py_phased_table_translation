@@ -12,10 +12,10 @@ class MessageFormatter(ABC):
     #    *
     #     * Creates a message explaining what's going on.
     #     *
-    #     * @param mandatory      true if we were translating mandatory field.
-    #     * @param mappingContext Translation context.
-    #     * @param field          Field we were translating.
-    #     * @param message        Explanation of what went wrong or what we were doing.
+    #     :param mandatory:      true if we were translating mandatory field.
+    #     :param mappingContext: Translation context.
+    #     :param field:          Field we were translating.
+    #     :param message:        Explanation of what went wrong or what we were doing.
     #     * @return Detailed message.
     #
     @abstractmethod

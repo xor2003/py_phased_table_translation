@@ -64,7 +64,7 @@ class MandatoryFieldMapper(AbstractStateMachineFieldMapper[OO, RO, P]):
     #    *
     #     * Creates new instance.
     #     *
-    #     * @param messageFormatterFactory Factory for formatter of error messages or null
+    #     :param messageFormatterFactory: Factory for formatter of error messages or null
     #     *                                if {@link SingleLineMesasgeFormatter} should be used.
     #     
     def __init__(self, messageFormatterFactory: Callable[...,MessageFormatter]=None):
