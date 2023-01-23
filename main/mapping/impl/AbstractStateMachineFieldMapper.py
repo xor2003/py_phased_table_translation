@@ -1,5 +1,5 @@
 from typing import TypeVar, Any
-from abc import ABC, abstractmethod
+from abc import abstractmethod
 
 from .statemachine.MachineContext import MachineContext
 from ..Field import Field
@@ -7,29 +7,36 @@ from ..MappingContext import MappingContext
 from ..FieldMapper import FieldMapper
 from ...IllegalStateException import IllegalStateException
 
-#*
-# * Field mapper based on state machine.
-# * <p>
-# * Child classes should define their state machine using {@link AbstractStateMachineFieldMapper#getStateMachine()}.
-# * <p>
-# * This base class will check for incorrect configuration combinations:
-# * <ul>
-# * <li>If there is no setter then defaulter and translation are useless and should not be set.</li>
-# * <li>If there is no getter then it's pointless to set
-# *      validator or translator because they won't be called anyway.</li>
-# * </ul>
-# * <p>
-# * OO - Original object type.
-# * RO - Resulting object type.
-# * P - Type of parameters object.
-#
-OO = TypeVar('OO')
-RO = TypeVar('RO')
-P = TypeVar('P')
+
+OO = TypeVar("OO")
+RO = TypeVar("RO")
+P = TypeVar("P")
+
 
 class AbstractStateMachineFieldMapper(FieldMapper[OO, RO, P]):
+    """
+    Field mapper based on state machine.
 
-    def mapField(self, field: Field[OO, RO, Any, Any, P], mappingContext: MappingContext[OO, RO, P]):
+    Child classes should define their state machine using {@link AbstractStateMachineFieldMapper#getStateMachine()}.
+
+    This base class will check for incorrect configuration combinations:
+
+    If there is no setter then defaulter and translation are useless and should not be set.
+    If there is no getter then it's pointless to set
+         validator or translator because they won't be called anyway.
+
+    OO - Original object type.
+
+    RO - Resulting object type.
+
+    P - Type of parameters object.
+    """
+
+    def mapField(
+            self,
+            field: Field[OO, RO, Any, Any, P],
+            mappingContext: MappingContext[OO, RO, P],
+    ):
         if mappingContext is None:
             raise IllegalStateException("Translation context must be set")
 
@@ -37,19 +44,25 @@ class AbstractStateMachineFieldMapper(FieldMapper[OO, RO, P]):
             raise IllegalStateException("Field descriptor must be set")
 
         if (not field.setter) and (field.defaulter or field.translator):
-            raise IllegalStateException("Since there is no setter, defaulter and translator make no sense" + " as their result will be ignored.")
+            raise IllegalStateException(
+                "Since there is no setter, defaulter and translator make no sense"
+                + " as their result will be ignored."
+            )
 
         if (not field.getter) and (field.validator or field.translator):
-            raise IllegalStateException("If there is no getter then it's pointless to set " + "validator or translator because they won't be called anyway.")
+            raise IllegalStateException(
+                "If there is no getter then it's pointless to set "
+                + "validator or translator because they won't be called anyway."
+            )
 
         self.getStateMachine(field).process(field, mappingContext, MachineContext())
 
-    #    *
-    #     * Gets state machine for this field mapper.
-    #     *
-    #     :param field: Field to be translated.
-    #     * @return Starting state of state machine.
-    #     
     @abstractmethod
     def getStateMachine(self, field: Field[OO, RO, Any, Any, P]):
+        """
+        Gets state machine for this field mapper.
+
+        :param field: Field to be translated.
+        :return: Starting state of state machine.
+        """
         pass

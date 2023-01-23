@@ -1,15 +1,3 @@
-#*
-# * Simple object mapper that applies fields mappers
-# * one-by-one in the same thread in the specified order.
-# * <p>
-# * Mandatory fields are mapped using {@link SimpleObjectMapper#mandatoryFieldMapper}
-# * while optional fields are mapped using {@link SimpleObjectMapper#optionalFieldMapper}.
-# * <p>
-# * OO - Original object type.
-# * RO - Resulting object type.
-# * P - Type of parameters object.
-#
-
 from typing import Generic, TypeVar, Any, Dict
 
 from ..Field import Field
@@ -19,23 +7,48 @@ from ..ObjectMapper import ObjectMapper
 from .OptionalFieldMapper import OptionalFieldMapper
 from .MandatoryFieldMapper import MandatoryFieldMapper
 
-OO = TypeVar('OO')
-RO = TypeVar('RO')
-P = TypeVar('P')
+OO = TypeVar("OO")
+RO = TypeVar("RO")
+P = TypeVar("P")
 
 
 class SimpleObjectMapper(Generic[OO, RO, P], ObjectMapper[OO, RO, P]):
+    """
+    Simple object mapper that applies fields mappers
+    one-by-one in the same thread in the specified order.
+
+    Mandatory fields are mapped using {@link SimpleObjectMapper#mandatoryFieldMapper}
+    while optional fields are mapped using {@link SimpleObjectMapper#optionalFieldMapper}.
+
+    OO - Original object type.
+
+    RO - Resulting object type.
+
+    P - Type of parameters object.
+    """
 
     def __init__(self):
-        self.optionalFieldMapper: FieldMapper[OO, RO, P] = OptionalFieldMapper[OO, RO, P]()
-        self.mandatoryFieldMapper: FieldMapper[OO, RO, P] = MandatoryFieldMapper[OO, RO, P]()
+        self.optionalFieldMapper: FieldMapper[OO, RO, P] = OptionalFieldMapper[
+            OO, RO, P
+        ]()
+        self.mandatoryFieldMapper: FieldMapper[OO, RO, P] = MandatoryFieldMapper[
+            OO, RO, P
+        ]()
 
-    def mapAllFields(self, raw: OO, translated: RO, fields: Dict[Field[OO, RO, Any, Any, P], bool], parameters: P) -> RO:
+    def mapAllFields(
+        self,
+        raw: OO,
+        translated: RO,
+        fields: Dict[Field[OO, RO, Any, Any, P], bool],
+        parameters: P,
+    ):
         assert raw is not None
         assert translated is not None
         assert fields is not None
-        mappingContext = MappingContext[OO, RO, P](originalObject=raw, resultObject=translated, parameters=parameters)
+        mappingContext: MappingContext[OO, RO, P] = MappingContext(
+            originalObject=raw, resultObject=translated, parameters=parameters
+        )
         for field, mandatory in fields.items():
-            (self.mandatoryFieldMapper if mandatory else self.optionalFieldMapper).mapField(field, mappingContext)
-        return mappingContext.resultObject
-
+            (
+                self.mandatoryFieldMapper if mandatory else self.optionalFieldMapper
+            ).mapField(field, mappingContext)

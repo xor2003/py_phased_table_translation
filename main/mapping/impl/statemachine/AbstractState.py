@@ -1,77 +1,94 @@
-# *
-# * Base class for steps in state machine for a field translation.
-# * <p>
-# * Since steps reference each other and can hardly be created without
-# * egg-chicken problem, {@link AbstractState#configure} should be used
-# * to configure a state once it is created.
-# 
-
-
-from abc import ABC
 from collections.abc import Callable
+from typing import Optional
+
+#  from typing import Any
 
 from .State import State
 from ....IllegalStateException import IllegalStateException
 from ...Field import Field
 from ...MappingContext import MappingContext
 from .MachineContext import MachineContext
+import logging
+
+logger = logging.getLogger(__name__)
+
+
+class Closure:
+    def __init__(self, lambda_: Optional[Callable], delegate, *args):
+        self.lambda_ = lambda_
+        if lambda_:
+            assert delegate is not None
+            self.delegate = delegate
+            if len(args) == 0:
+                args = (None,)
+            self.args = args
+
+    def __call__(self):
+        return self.lambda_(self.delegate, *self.args)
 
 
 class AbstractState(State):
+    """
+    Base class for steps in state machine for a field translation.
 
-    def __init__(self):
-        self.onException: State = None
-        self.onNull: State = None
-        self.onNonNull: State = None
-        self.onUndefined: State = None
+    Since steps reference each other and can hardly be created without
+    egg-chicken problem, {@link AbstractState#configure} should be used
+    to configure a state once it is created.
+    """
 
-    '''
-    #     * Configures this step.
-    #     *
-    #     :param onNonNull:   Where to transition if current step returns not null.
-    #     :param onNull:      Where to transition if current steps returns null.
-    #     :param onException: Where to transition when exception happens during current step.
-    #     :param onUndefined: Where to transition if current step is not configured.
-    #     *                    Like when validator is not defined.
-    '''
-    def configure(self, onNonNull: State, onNull: State, onException: State, onUndefined: State):
+    def configure(
+            self, onNonNull: State, onNull: State, onException: State, onUndefined: State
+    ):
+        """
+        Configures this step.
+
+        :param onNonNull:   Where to transition if current step returns not null.
+        :param onNull:      Where to transition if current steps returns null.
+        :param onException: Where to transition when exception happens during current step.
+        :param onUndefined: Where to transition if current step is not configured.
+                                 Like when validator is not defined.
+        """
         assert onNonNull is not None
         assert onNull is not None
         assert onException is not None
         assert onUndefined is not None
-        self.onException: State = onException
-        self.onNull: State = onNull
-        self.onNonNull: State = onNonNull
-        self.onUndefined: State = onUndefined
+        self.onException = onException
+        self.onNull = onNull
+        self.onNonNull = onNonNull
+        self.onUndefined = onUndefined
 
-    '''
-    #     * Is resulting value null?
-    #     *
-    #     :param value: Result of current step evaluation.
-    #     * @return true if should transition to {@link AbstractState#onNull}.
-    '''
-    def isNull(self, value=None):
+    def isNull(self, value):
+        """
+        Is resulting value null?
+
+        :param value: Result of current step evaluation.
+        :return: true if should transition to {@link AbstractState#onNull}.
+        """
         return value is None
 
-    #    *
-    #     * Perform an action.
-    #     *
-    #     :param field:          Field we're working on.
-    #     :param mappingContext: Mapping context.
-    #     :param machineContext: State of translation machine.
-    #     :param propagate:      Should current step propagate it's result as input to next step?
-    #     :param action:         Action to perform.
-    #     * @return Result of calling next step on result returned by action.
-    #     * If current step is not configured for a field as per {@link AbstractState#isDefined}
-    #     * then next step is {@link AbstractState#onUndefined}.
-    #     * In case of action throwing exception, next step will be {@link AbstractState#onException}.
-    #     * If action returns null as per {@link AbstractState#isNull} then next step will be {@link AbstractState#onNull}.
-    #     * Otherwise, next step is {@link AbstractState#onNonNull}.
-    #     
+    def safely(
+            self,
+            field: Field,
+            mappingContext: MappingContext,
+            machineContext: MachineContext,
+            propagate: bool,
+            action: Closure,
+    ):
+        """
+        Perform an action.
 
-
-    def safely(self, field: Field, mappingContext: MappingContext, machineContext: MachineContext, propagate: bool,
-               action: Callable):
+        :param field:          Field we're working on.
+        :param mappingContext: Mapping context.
+        :param machineContext: State of translation machine.
+        :param propagate:      Should current step propagate it's result as input to next step?
+        :param action:         Action to perform.
+        :return: Result of calling next step on result returned by action.
+        If current step is not configured for a field as per {@link AbstractState#isDefined}
+        then next step is {@link AbstractState#onUndefined}.
+        In case of action throwing exception, next step will be {@link AbstractState#onException}.
+        If action returns null as per {@link AbstractState#isNull} then next step will be {@link AbstractState#onNull}.
+        Otherwise, next step is {@link AbstractState#onNonNull}.
+        """
         assert field is not None
         assert mappingContext is not None
         assert machineContext is not None
@@ -80,14 +97,16 @@ class AbstractState(State):
             if self.onUndefined:
                 return self.onUndefined.process(field, mappingContext, machineContext)
 
-            raise IllegalStateException(f"{self} is undefined for {field.id} and onUndefined is not set")
+            raise IllegalStateException(
+                f"{self} is undefined for {field.id} and onUndefined is not set"
+            )
 
         result = None
         try:
-            print(f"{field.id} {action}")
-            result = action(action.delegate, *action.args)
+            logger.debug("Processing field %s", field.id)
+            result = action()
         except Exception as e:
-            print(e)
+            logger.error(e)
             machineContext.error = e
             return self.onException.process(field, mappingContext, machineContext)
 
@@ -99,24 +118,15 @@ class AbstractState(State):
         else:
             return self.onNonNull.process(field, mappingContext, machineContext)
 
-        #    *
-        #     * Calls closure with specified delegate.
-        #     * <p>
-        #     * Creates closure clone so this method is safe to use in multithreaded environment.
-        #     *
-        #     :param closure:  Closure to call.
-        #     :param delegate: Delegate to use.
-        #     :param args:     Closure parameters.
-        #     * @return Whatever closure returns.
-        #
+    def callWithDelegate(self, closure: Optional[Callable], delegate, *args):
+        """
+        Calls closure with specified delegate.
 
-    def callWithDelegate(self, closure, delegate, *args):
-        # clonedClosure = closure.invokeMethod("clone", [])  TODO
-        # clonedClosure.resolveStrategy = Closure.DELEGATE_FIRST
-        if closure:
-            assert delegate is not None
-            closure.delegate = delegate
-            if len(args) == 0:
-                args = [None]
-            closure.args = args
-        return closure
+        Creates closure clone so this method is safe to use in multithreaded environment.
+
+        :param closure:  Closure to call.
+        :param delegate: Delegate to use.
+        :param args:     Closure parameters.
+        :return: Whatever closure returns.
+        """
+        return Closure(closure, delegate, *args)
