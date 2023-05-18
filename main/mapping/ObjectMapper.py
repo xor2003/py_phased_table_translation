@@ -1,5 +1,6 @@
-from typing import Generic, TypeVar, Any, Dict
+# pylint: disable=invalid-name
 from abc import ABC, abstractmethod
+from typing import Generic, TypeVar, Any, Dict
 
 from .Field import Field
 
@@ -9,8 +10,7 @@ P = TypeVar("P")
 
 
 class ObjectMapper(ABC, Generic[OO, RO, P]):
-    """
-    Maps original object to resulting object.
+    """Maps original object to resulting object.
 
     OO - Original object type.
 
@@ -27,8 +27,7 @@ class ObjectMapper(ABC, Generic[OO, RO, P]):
             fields: Dict[Field[OO, RO, Any, Any, P], bool],
             parameters: P,
     ):
-        """
-        > Applies translation to all specified fields.
+        """> Applies translation to all specified fields.
 
         :param raw:        Original object to translate.
                             It will be available as {@link MappingContext#originalObject}.

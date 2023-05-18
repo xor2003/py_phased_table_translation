@@ -1,25 +1,26 @@
+# pylint: disable=invalid-name
+import logging
 from collections.abc import Callable
 from typing import Optional
 
-#  from typing import Any
-
+from .MachineContext import MachineContext
 from .State import State
-from ....IllegalStateException import IllegalStateException
 from ...Field import Field
 from ...MappingContext import MappingContext
-from .MachineContext import MachineContext
-import logging
+from ....IllegalStateException import IllegalStateException
 
 logger = logging.getLogger(__name__)
 
 
 class Closure:
+    """Helps to simulate Groovy's closure on Python."""
+
     def __init__(self, lambda_: Optional[Callable], delegate, *args):
         self.lambda_ = lambda_
         if lambda_:
             assert delegate is not None
             self.delegate = delegate
-            if len(args) == 0:
+            if not args:
                 args = (None,)
             self.args = args
 
@@ -28,8 +29,7 @@ class Closure:
 
 
 class AbstractState(State):
-    """
-    Base class for steps in state machine for a field translation.
+    """Base class for steps in state machine for a field translation.
 
     Since steps reference each other and can hardly be created without
     egg-chicken problem, {@link AbstractState#configure} should be used
@@ -39,8 +39,7 @@ class AbstractState(State):
     def configure(
             self, onNonNull: State, onNull: State, onException: State, onUndefined: State
     ):
-        """
-        Configures this step.
+        """Configures this step.
 
         :param onNonNull:   Where to transition if current step returns not null.
         :param onNull:      Where to transition if current steps returns null.
@@ -58,8 +57,7 @@ class AbstractState(State):
         self.onUndefined = onUndefined
 
     def isNull(self, value):
-        """
-        Is resulting value null?
+        """Is resulting value null?.
 
         :param value: Result of current step evaluation.
         :return: true if should transition to {@link AbstractState#onNull}.
@@ -74,8 +72,7 @@ class AbstractState(State):
             propagate: bool,
             action: Closure,
     ):
-        """
-        Perform an action.
+        """Perform an action.
 
         :param field:          Field we're working on.
         :param mappingContext: Mapping context.
@@ -115,12 +112,10 @@ class AbstractState(State):
 
         if self.isNull(result):
             return self.onNull.process(field, mappingContext, machineContext)
-        else:
-            return self.onNonNull.process(field, mappingContext, machineContext)
+        return self.onNonNull.process(field, mappingContext, machineContext)
 
     def callWithDelegate(self, closure: Optional[Callable], delegate, *args):
-        """
-        Calls closure with specified delegate.
+        """Calls closure with specified delegate.
 
         Creates closure clone so this method is safe to use in multithreaded environment.
 

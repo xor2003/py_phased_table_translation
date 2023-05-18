@@ -1,20 +1,19 @@
+# pylint: disable=invalid-name
 from .AbstractState import AbstractState
-from ....IllegalStateException import IllegalStateException
 from .MachineContext import MachineContext
 from ..MessageFormatter import MessageFormatter
 from ...Field import Field
 from ...MappingContext import MappingContext
+from ....IllegalStateException import IllegalStateException
 
 
 class CodeError(AbstractState):
-    """
-    Represents code error.
+    """Represents code error.
     Does not need to be configured.
     """
 
     def __init__(self, errorDescription: str, messageFormatter: MessageFormatter):
-        """
-        Creates new instance.
+        """Creates new instance.
 
         :param errorDescription: Explanation of error.
         :param messageFormatter: Formatter of error message.

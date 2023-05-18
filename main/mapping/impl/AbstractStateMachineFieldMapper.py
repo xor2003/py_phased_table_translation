@@ -1,12 +1,12 @@
-from typing import TypeVar, Any
+# pylint: disable=invalid-name
 from abc import abstractmethod
+from typing import TypeVar, Any
 
 from .statemachine.MachineContext import MachineContext
 from ..Field import Field
-from ..MappingContext import MappingContext
 from ..FieldMapper import FieldMapper
+from ..MappingContext import MappingContext
 from ...IllegalStateException import IllegalStateException
-
 
 OO = TypeVar("OO")
 RO = TypeVar("RO")
@@ -14,8 +14,7 @@ P = TypeVar("P")
 
 
 class AbstractStateMachineFieldMapper(FieldMapper[OO, RO, P]):
-    """
-    Field mapper based on state machine.
+    """Field mapper based on state machine.
 
     Child classes should define their state machine using {@link AbstractStateMachineFieldMapper#getStateMachine()}.
 
@@ -59,8 +58,7 @@ class AbstractStateMachineFieldMapper(FieldMapper[OO, RO, P]):
 
     @abstractmethod
     def getStateMachine(self, field: Field[OO, RO, Any, Any, P]):
-        """
-        Gets state machine for this field mapper.
+        """Gets state machine for this field mapper.
 
         :param field: Field to be translated.
         :return: Starting state of state machine.

@@ -1,14 +1,13 @@
-from typing import Any
+# pylint: disable=invalid-name
 from abc import ABC, abstractmethod
+from typing import Any
 
-from ..MappingContext import MappingContext
 from ..Field import Field
+from ..MappingContext import MappingContext
 
 
 class MessageFormatter(ABC):
-    """
-    Formats messages related to mapping.
-    """
+    """Formats messages related to mapping."""
 
     @abstractmethod
     def formatMessage(
@@ -17,8 +16,7 @@ class MessageFormatter(ABC):
             field: Field[Any, Any, Any, Any, Any],
             message: str,
     ) -> str:
-        """
-        Creates a message explaining what's going on.
+        """Creates a message explaining what's going on.
 
         :param mappingContext: Translation context.
         :param field:          Field we were translating.

@@ -1,19 +1,17 @@
+# pylint: disable=invalid-name
 from abc import abstractmethod, ABC
 
+from .MachineContext import MachineContext
 from ...Field import Field
 from ...MappingContext import MappingContext
-from .MachineContext import MachineContext
 
 
 class State(ABC):
-    """
-    State in field translation state machine.
-    """
+    """State in field translation state machine."""
 
     @abstractmethod
     def isDefined(self, field: Field):
-        """
-        Is current step configured in field configuration?
+        """Is current step configured in field configuration?.
 
         :param field: Field configuration.
         :return: true if current step is configured for a field.
@@ -27,8 +25,7 @@ class State(ABC):
             mappingContext: MappingContext,
             machineContext: MachineContext,
     ):
-        """
-        Do the work related to the step.
+        """Do the work related to the step.
 
         :param field:          Definition of the field.
         :param mappingContext: Mapping context.

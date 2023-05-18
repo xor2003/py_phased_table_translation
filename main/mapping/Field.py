@@ -1,24 +1,6 @@
-# *
-#    Descriptor of a field mapping.
-#    <p>
-#    Intended to be constructed using fluid API and method chaining.
-#    Example:
-#    <code><pre>
-#        new Field&lt;Map&lt;String,?&gt;,Event,String,Long&gt;().
-#            withId('notificationIdentifier').
-#            withGetter {it.identifier}.
-#            withTranslator {Long.parseLong(it)}.
-#            withSetter { resultObject.notificationIdentifier=it }* </pre></code>
-#    <p>
-#    OO - Original object type.
-#    RO - Resulting object type.
-#    OF - Original field type.
-#    RF - Resulting field type.
-#    P - Type of parameters object.
-#
-from typing import Generic, TypeVar, Callable, Optional
-
+# pylint: disable=invalid-name
 import logging
+from typing import Generic, TypeVar, Callable, Optional
 
 logger = logging.getLogger(__name__)
 
@@ -30,11 +12,12 @@ P = TypeVar("P")
 
 
 class Field(Generic[OO, RO, OF, RF, P]):
-    """
-    Descriptor of a field mapping.
+    """Descriptor of a field mapping.
 
     Intended to be constructed using fluid API and method chaining.
+
     Example:
+    -------
     <code><pre>
         new Field&lt;Map&lt;String,?&gt;,Event,String,Long&gt;().
             withId('notificationIdentifier').
@@ -63,8 +46,7 @@ class Field(Generic[OO, RO, OF, RF, P]):
             withSetter: Optional[Callable[[RF], None]] = None,
             withDefaulter: Optional[Callable[[], RF]] = None,
     ):
-        """
-        :param withId:         Identifier of field.
+        """:param withId:         Identifier of field.
                                Used for debugging and testing purposes.
 
         :param withGetter:     Gets field value from original object.
@@ -87,7 +69,7 @@ class Field(Generic[OO, RO, OF, RF, P]):
         logger.debug(self)
 
     def __str__(self) -> str:
-        import inspect
+        from inspect import getsource
 
         result = self.id
         for key, _lambda in {
@@ -98,7 +80,7 @@ class Field(Generic[OO, RO, OF, RF, P]):
             "S": self.setter,
         }.items():
             if _lambda:
-                value = inspect.getsource(_lambda)
+                value = getsource(_lambda)
                 if "lambda" in value:
                     value = value.split(sep="lambda")[1].split(sep=":")[1].strip()
                 result += f" {key}=~{value}~"

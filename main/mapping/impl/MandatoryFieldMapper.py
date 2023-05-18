@@ -1,11 +1,9 @@
+# pylint: disable=invalid-name
 from typing import Callable, TypeVar, Any, Optional
 
 from .AbstractStateMachineFieldMapper import AbstractStateMachineFieldMapper
 from .MessageFormatter import MessageFormatter
 from .SingleLineMesasgeFormatter import SingleLineMesasgeFormatter
-from ...IllegalStateException import IllegalStateException
-from ..Field import Field
-from ..MappingContext import MappingContext
 from .statemachine.CodeError import CodeError
 from .statemachine.Defaulter import Defaulter
 from .statemachine.End import End
@@ -16,6 +14,9 @@ from .statemachine.State import State
 from .statemachine.Translator import Translator
 from .statemachine.Validator import Validator
 from .statemachine.WarnIfDefinedOrDataError import WarnIfDefinedOrDataError
+from ..Field import Field
+from ..MappingContext import MappingContext
+from ...IllegalStateException import IllegalStateException
 
 OO = TypeVar("OO")
 RO = TypeVar("RO")
@@ -23,8 +24,7 @@ P = TypeVar("P")
 
 
 class MandatoryFieldMapper(AbstractStateMachineFieldMapper[OO, RO, P]):
-    """
-    State machine based mapper for mandatory fields.
+    """State machine based mapper for mandatory fields.
 
     Mandatory means that corresponding field in the resulting object must be set.
     However, in pure validation mode when there is no field to set in

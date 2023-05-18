@@ -1,11 +1,9 @@
+# pylint: disable=invalid-name
 class MachineContext:
-    """
-    Intermediate state of a state machine as we transition between states.
-    """
+    """Intermediate state of a state machine as we transition between states."""
 
     def __init__(self):
-        """
-        Current result.
+        """Current result.
 
         An error that has happened.
         """

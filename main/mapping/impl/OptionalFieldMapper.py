@@ -1,3 +1,4 @@
+# pylint: disable=invalid-name
 from typing import Callable, TypeVar, Any, Optional
 
 from .AbstractStateMachineFieldMapper import AbstractStateMachineFieldMapper
@@ -15,15 +16,13 @@ from .statemachine.Warn import Warn
 from ..Field import Field
 from ...IllegalStateException import IllegalStateException
 
-
 OO = TypeVar("OO")
 RO = TypeVar("RO")
 P = TypeVar("P")
 
 
 class OptionalFieldMapper(AbstractStateMachineFieldMapper[OO, RO, P]):
-    """
-    State machine based mapper for optional fields.
+    """State machine based mapper for optional fields.
 
     Optional means that corresponding field in the resulting object is optional and is not required to be set.
     Optional field could be used in pure validation mode when there is no field to set in
@@ -114,8 +113,7 @@ class OptionalFieldMapper(AbstractStateMachineFieldMapper[OO, RO, P]):
     #
     @staticmethod
     def createIgnoreInputFieldStateMachine() -> State:
-        """
-        Create state machine for the case when we just want to highlight that we ignore certain input field.
+        """Create state machine for the case when we just want to highlight that we ignore certain input field.
 
         We're supposed to have a getter to show that we are aware of the field but nothing else
         to show we are ignoring it.
@@ -126,8 +124,7 @@ class OptionalFieldMapper(AbstractStateMachineFieldMapper[OO, RO, P]):
 
     @staticmethod
     def createIgnoreOutputFieldStateMachine() -> State:
-        """
-        Create state machine for the case when we just want to highlight that we ignore certain output field.
+        """Create state machine for the case when we just want to highlight that we ignore certain output field.
 
         We're supposed to have a setter to show that we are aware of the field but nothing else
         to show we are ignoring it.
@@ -139,8 +136,7 @@ class OptionalFieldMapper(AbstractStateMachineFieldMapper[OO, RO, P]):
     def __init__(
             self, messageFormatterFactory: Optional[Callable[..., MessageFormatter]] = None
     ):
-        """
-        Creates new instance.
+        """Creates new instance.
 
         :param messageFormatterFactory: Factory for formatter of error messages or null
                                         if {@link SingleLineMesasgeFormatter} should be used.

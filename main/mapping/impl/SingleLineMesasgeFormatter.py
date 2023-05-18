@@ -1,3 +1,4 @@
+# pylint: disable=invalid-name
 from typing import Any
 
 from .MessageFormatter import MessageFormatter
@@ -6,8 +7,7 @@ from ..MappingContext import MappingContext
 
 
 class SingleLineMesasgeFormatter(MessageFormatter):
-    """
-    Message formatter that puts all information on single line.
+    """Message formatter that puts all information on single line.
 
     Information that is added:
     <ul>
@@ -20,9 +20,7 @@ class SingleLineMesasgeFormatter(MessageFormatter):
     """
 
     def __init__(self, mandatory: bool = False):
-        """
-        :param mandatory: Indicates if the field is mandatory.
-        """
+        """:param mandatory: Indicates if the field is mandatory."""
         self.mandatory: bool = mandatory
 
     def formatMessage(

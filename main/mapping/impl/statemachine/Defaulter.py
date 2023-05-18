@@ -1,13 +1,12 @@
+# pylint: disable=invalid-name
 from .AbstractState import AbstractState
+from .MachineContext import MachineContext
 from ...Field import Field
 from ...MappingContext import MappingContext
-from .MachineContext import MachineContext
 
 
 class Defaulter(AbstractState):
-    """
-    Obtains default value.
-    """
+    """Obtains default value."""
 
     def process(
             self,

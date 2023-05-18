@@ -1,3 +1,4 @@
+# pylint: disable=invalid-name
 from .Warn import Warn
 
 
@@ -6,8 +7,7 @@ class IllegalArgumentException(ValueError):
 
 
 class WarnIfDefinedOrDataError(Warn):
-    """
-    Warn if next step is defined, throw otherwise.
+    """Warn if next step is defined, throw otherwise.
 
     If next (delegate) step is configured then works like {@link Warn}.
     If next step is not defined then instead it throws data error with the same message
@@ -15,8 +15,7 @@ class WarnIfDefinedOrDataError(Warn):
     """
 
     def __init__(self, delegate, messageFactory):
-        """
-        Creates instance.
+        """Creates instance.
 
         :param delegate: Step to delegate to after logging.
         """

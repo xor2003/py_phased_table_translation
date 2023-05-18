@@ -1,10 +1,9 @@
+# pylint: disable=invalid-name
 from .AbstractState import AbstractState
 
 
 class Validator(AbstractState):
-    """
-    Validates result value.
-    """
+    """Validates result value."""
 
     def process(self, field, mappingContext, machineContext):
         assert field is not None
@@ -24,4 +23,4 @@ class Validator(AbstractState):
         return field.validator is not None
 
     def isNull(self, value):
-        return bool(not value)
+        return not value

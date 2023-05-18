@@ -1,13 +1,12 @@
+# pylint: disable=invalid-name
 from .AbstractState import AbstractState
+from .MachineContext import MachineContext
 from ...Field import Field
 from ...MappingContext import MappingContext
-from .MachineContext import MachineContext
 
 
 class Setter(AbstractState):
-    """
-    Pushes result value to setter.
-    """
+    """Pushes result value to setter."""
 
     def process(
             self,

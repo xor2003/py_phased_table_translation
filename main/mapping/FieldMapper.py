@@ -1,5 +1,6 @@
-from typing import Generic, TypeVar, Any
+# pylint: disable=invalid-name
 from abc import ABC, abstractmethod
+from typing import Generic, TypeVar, Any
 
 from .Field import Field
 from .MappingContext import MappingContext
@@ -10,12 +11,13 @@ P = TypeVar("P")
 
 
 class FieldMapper(ABC, Generic[OO, RO, P]):
-    """
-    * Maps single field from original object to result object.
-    *
-    * OO - Original object type.
-    * RO - Resulting object type.
-    * P - Type of parameters object.
+    """Maps single field from original object to result object.
+
+    OO - Original object type.
+
+    RO - Resulting object type.
+
+    P - Type of parameters object.
     """
 
     @abstractmethod
@@ -24,8 +26,7 @@ class FieldMapper(ABC, Generic[OO, RO, P]):
             field: Field[OO, RO, Any, Any, P],
             mappingContext: MappingContext[OO, RO, P],
     ):
-        """
-        > Applies processing to specified field
+        """> Applies processing to specified field.
 
         :param field: Field descriptor telling how to extract, map and inject field value
                       from original to resulting object.

@@ -1,11 +1,12 @@
+# pylint: disable=invalid-name
 from typing import Generic, TypeVar, Any, Dict
 
+from .MandatoryFieldMapper import MandatoryFieldMapper
+from .OptionalFieldMapper import OptionalFieldMapper
 from ..Field import Field
 from ..FieldMapper import FieldMapper
 from ..MappingContext import MappingContext
 from ..ObjectMapper import ObjectMapper
-from .OptionalFieldMapper import OptionalFieldMapper
-from .MandatoryFieldMapper import MandatoryFieldMapper
 
 OO = TypeVar("OO")
 RO = TypeVar("RO")
@@ -13,8 +14,7 @@ P = TypeVar("P")
 
 
 class SimpleObjectMapper(Generic[OO, RO, P], ObjectMapper[OO, RO, P]):
-    """
-    Simple object mapper that applies fields mappers
+    """Simple object mapper that applies fields mappers
     one-by-one in the same thread in the specified order.
 
     Mandatory fields are mapped using {@link SimpleObjectMapper#mandatoryFieldMapper}

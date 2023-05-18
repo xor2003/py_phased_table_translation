@@ -1,19 +1,18 @@
+# pylint: disable=invalid-name
+import logging
+
 from .AbstractState import AbstractState
+from .MachineContext import MachineContext
 from .State import State
 from ..MessageFormatter import MessageFormatter
 from ...Field import Field
 from ...MappingContext import MappingContext
-from .MachineContext import MachineContext
-
-import logging
 
 logger = logging.getLogger(__name__)
 
 
 class Warn(AbstractState):
-    """
-    Pushes a warning to log and then delegates to another step.
-    """
+    """Pushes a warning to log and then delegates to another step."""
 
     def process(
             self,
@@ -41,8 +40,7 @@ class Warn(AbstractState):
         return bool(self._delegate.isDefined(field))
 
     def __init__(self, delegate: State, messageFormatter: MessageFormatter):
-        """
-        Creates instance.
+        """Creates instance.
 
         :param delegate: Step to delegate to after logging.
         """
@@ -58,8 +56,7 @@ class Warn(AbstractState):
             mappingContext: MappingContext,
             machineContext: MachineContext,
     ):
-        """
-        Create message to be logged.
+        """Create message to be logged.
 
         :param field:          Field configuration.
         :param mappingContext: Translation context.
