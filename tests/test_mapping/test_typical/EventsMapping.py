@@ -6,13 +6,13 @@ from main.mapping.Field import Field
 from main.Asgn import Asgn
 
 from main.mapping.ObjectMapper import ObjectMapper
-from test.mapping.typical.DistinguishedNameSerializer import DistinguishedNameSerializer
-from test.mapping.typical.Exchange import Exchange
-from test.mapping.typical.ExchangeFormatter import ExchangeFormatter
+from DistinguishedNameSerializer import DistinguishedNameSerializer
+from Exchange import Exchange
+from ExchangeFormatter import ExchangeFormatter
 
 from typing import TypeVar
 
-from test.mapping.typical.TimeSerializer import TimeSerializer
+from TimeSerializer import TimeSerializer
 
 OF = TypeVar('OF')
 RF = TypeVar('RF')

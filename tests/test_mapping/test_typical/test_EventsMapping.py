@@ -4,13 +4,13 @@ from typing import TypeVar, Any
 import pytest
 
 from main.mapping.impl.SimpleObjectMapper import SimpleObjectMapper
-from test.mapping.typical.DistinguishedNameSerializer import DistinguishedNameSerializer
+from DistinguishedNameSerializer import DistinguishedNameSerializer
 from mock import Mock
 
-from test.mapping.typical.EventsMapping import EventsMapping, BatchContext
-from test.mapping.typical.Exchange import Exchange
-from test.mapping.typical.ExchangeFormatter import ExchangeFormatter
-from test.mapping.typical.TimeSerializer import TimeSerializer
+from EventsMapping import EventsMapping, BatchContext
+from Exchange import Exchange
+from ExchangeFormatter import ExchangeFormatter
+from TimeSerializer import TimeSerializer
 
 OO = TypeVar('OO')
 RO = TypeVar('RO')
@@ -108,6 +108,7 @@ class EventsMappingTest:
         '''
         assert len(result) == 1
         event = result[0]
+        assert isinstance(event, dict)
         assert event['out_notificationType'] == 'notifyNewAlarm'
         assert event['out_alarmType'] == 'CommunicationsAlarm'
         assert event['out_objectClass'] == 'PHYSICAL_TERMINATION_POINT'
