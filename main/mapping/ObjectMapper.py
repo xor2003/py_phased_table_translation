@@ -1,6 +1,6 @@
 # pylint: disable=invalid-name
 from abc import ABC, abstractmethod
-from typing import Generic, TypeVar, Any, Dict
+from typing import Generic, TypeVar, Any, List, Tuple
 
 from .Field import Field
 
@@ -24,7 +24,7 @@ class ObjectMapper(ABC, Generic[OO, RO, P]):
             self,
             raw: OO,
             translated: RO,
-            fields: Dict[Field[OO, RO, Any, Any, P], bool],
+            fields: List[Tuple[Field[OO, RO, Any, Any, P], bool]],
             parameters: P,
     ):
         """> Applies translation to all specified fields.

@@ -26,11 +26,8 @@ class Field(Generic[OO, RO, OF, RF, P]):
             withSetter { resultObject.notificationIdentifier=it }* </pre></code>
 
     OO - Original object type.
-
     RO - Resulting object type.
-
     OF - Original field type.
-
     RF - Resulting field type.
 
     P - Type of parameters object.
@@ -48,18 +45,12 @@ class Field(Generic[OO, RO, OF, RF, P]):
     ):
         """:param withId:         Identifier of field.
                                Used for debugging and testing purposes.
-
         :param withGetter:     Gets field value from original object.
-
         :param withValidator:  Verifies field value from original object.
-
         :param withTranslator: Translates field value from original object to format of result object.
-
         :param withSetter:     Injects translated field value into result object.
-
         :param withDefaulter:  Gets field value in case it was not set in original object.
         """
-        assert withId
         self.id = withId
         self.getter = withGetter
         self.validator = withValidator
@@ -67,6 +58,91 @@ class Field(Generic[OO, RO, OF, RF, P]):
         self.setter = withSetter
         self.defaulter = withDefaulter
         logger.debug(self)
+
+
+    def withId(self, id: str) -> 'Field':
+        """
+        Sets identifier of field.
+
+        Args:
+            id (str): Identifier for debugging and testing purposes.
+
+        Returns:
+            Field: This instance for chaining.
+        """
+        self.id = id
+        return self
+
+    def withGetter(self, c: Callable[[OO], OF]) -> 'Field':
+        """
+        Sets getter of value from original object.
+
+        Args:
+            c (Callable[[OO], OF]): Closure that takes one parameter - original object.
+                                    Should return original field value.
+
+        Returns:
+            Field: This instance for chaining.
+        """
+        self.getter = c
+        return self
+
+    def withValidator(self, c: Callable[[OF], bool]) -> 'Field':
+        """
+        Sets validator for original value.
+
+        Args:
+            c (Callable[[OF], bool]): Closure that takes one parameter - original field value.
+                                        Should return true if original value has acceptable value.
+
+        Returns:
+            Field: This instance for chaining.
+        """
+        self.validator = c
+        return self
+
+    def withTranslator(self, c: Callable[[OF], RF]) -> 'Field':
+        """
+        Sets mapper from original field value to resulting field value.
+
+        Args:
+            c (Callable[[OF], RF]): Closure that takes one parameter - original field value.
+                                    Additional translator parameters are available via closure delegate.
+                                    Should return resulting mapped value.
+
+        Returns:
+            Field: This instance for chaining.
+        """
+        self.translator = c
+        return self
+
+    def withSetter(self, c: Callable[[RF], None]) -> 'Field':
+        """
+        Sets setter for resulting field.
+
+        Args:
+            c (Callable[[RF], None]): Closure that takes one parameter - resulting field value.
+                                        Resulting object can be taken from delegate as {@link MappingContext#resultObject}.
+                                        Doesn't have to return anything.
+
+        Returns:
+            Field: This instance for chaining.
+        """
+        self.setter = c
+        return self
+
+    def withDefaulter(self, c: Callable[[], RF]) -> 'Field':
+        """
+        Sets calculator of default value.
+
+        Args:
+            c (Callable[[], RF]): Closure that takes no parameters and returns resulting value for the field.
+
+        Returns:
+            Field: This instance for chaining.
+        """
+        self.defaulter = c
+        return self
 
     def __str__(self) -> str:
         from inspect import getsource

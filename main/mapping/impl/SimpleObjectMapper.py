@@ -1,5 +1,5 @@
 # pylint: disable=invalid-name
-from typing import Generic, TypeVar, Any, Dict
+from typing import Generic, TypeVar, Any, List, Tuple
 
 from .MandatoryFieldMapper import MandatoryFieldMapper
 from .OptionalFieldMapper import OptionalFieldMapper
@@ -39,7 +39,7 @@ class SimpleObjectMapper(Generic[OO, RO, P], ObjectMapper[OO, RO, P]):
         self,
         raw: OO,
         translated: RO,
-        fields: Dict[Field[OO, RO, Any, Any, P], bool],
+        fields: List[Tuple[Field[OO, RO, Any, Any, P], bool]],
         parameters: P,
     ):
         assert raw is not None
@@ -48,7 +48,7 @@ class SimpleObjectMapper(Generic[OO, RO, P], ObjectMapper[OO, RO, P]):
         mappingContext: MappingContext[OO, RO, P] = MappingContext(
             originalObject=raw, resultObject=translated, parameters=parameters
         )
-        for field, mandatory in fields.items():
+        for field, mandatory in fields:
             (
                 self.mandatoryFieldMapper if mandatory else self.optionalFieldMapper
             ).mapField(field, mappingContext)
